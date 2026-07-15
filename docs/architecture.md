@@ -1,600 +1,269 @@
-# Architecture
+# Product Requirements
 
-**Project:** IncidentLab
+## Purpose
 
-**Version:** v0.1
+This document defines the functional scope, product objectives, and engineering requirements for IncidentLab.
 
-**Status:** Locked
+It serves as the reference point for understanding what the platform is intended to build, who it is designed for, and how its capabilities are expected to evolve over time.
 
-**Owner:** Prakhar Srivastava
-
-**Last Updated:** 14 July 2026
+Unlike the architecture documentation, this document focuses on **product requirements** rather than implementation details.
 
 ---
 
-# Purpose
+# Product Overview
 
-This document defines the architectural blueprint of IncidentLab.
+IncidentLab is an Operations Ownership Platform that explores how modern cloud-native systems are designed, operated, observed, and continuously improved.
 
-It explains how the platform is organized, how its major components interact, and which engineering principles govern architectural decisions.
+The platform is being developed incrementally through engineering sprints, with each milestone introducing a focused capability while maintaining architectural consistency and operational quality.
 
-This document intentionally avoids framework-specific implementation details. Technologies may evolve, but the architectural principles defined here should remain stable throughout the project's lifecycle.
-
----
-
-# Relationship with Other Documents
-
-IncidentLab follows a documentation-first engineering workflow.
-
-```
-Vision
-      ↓
-Product Requirements
-      ↓
-Architecture
-      ↓
-Implementation
-```
-
-## Depends On
-
-- vision.md
-- product-requirements.md
-
-## Impacts
-
-- Backend
-- Frontend
-- Infrastructure
-- APIs
-- CI/CD
-- Automation
-- Documentation
+Rather than serving as a traditional CRUD application, IncidentLab is intended to model the operational concerns encountered throughout the lifecycle of production systems.
 
 ---
 
-# Architecture Overview
+# Product Objectives
 
-IncidentLab follows a modular, automation-first architecture centered around production operations instead of individual technologies.
+The primary objectives of IncidentLab are to:
 
-Rather than exposing infrastructure components directly, the platform provides an operational workflow where engineers:
-
-- Provision environments
-- Generate production-like traffic
-- Inject failures
-- Observe system behavior
-- Investigate incidents
-- Recover affected services
-- Generate Root Cause Analysis (RCA)
-- Reset the environment
-
-Every architectural component exists to support this operational lifecycle.
-
-The architecture prioritizes:
-
-- Simplicity
-- Maintainability
-- Reproducibility
-- Observability
-- Automation
-- Extensibility
+- Build a maintainable cloud-native platform.
+- Promote operational ownership over infrastructure provisioning.
+- Provide a realistic foundation for incident investigation workflows.
+- Encourage production-inspired engineering practices.
+- Maintain a modular and evolvable software architecture.
+- Document architectural decisions alongside implementation.
 
 ---
 
-# Design Philosophy
+# Target Users
 
-Technology is never the product.
+IncidentLab is intended for engineers who are interested in designing and operating modern distributed systems.
 
-Engineering workflows are.
+Primary users include:
 
-IncidentLab demonstrates how modern engineering systems behave during production failures instead of teaching cloud technologies independently.
-
-Every architectural decision should improve at least one of the following:
-
-- Operational Thinking
-- Automation
-- Reliability
-- Observability
-- Reproducibility
-- Maintainability
+- Platform Engineers
+- DevOps Engineers
+- Site Reliability Engineers (SREs)
+- Cloud Engineers
+- Backend Engineers
+- Engineering teams responsible for operational excellence
 
 ---
 
-# Core Architectural Principles
+# Product Capabilities
 
-## Domain First
+The platform will evolve through multiple engineering milestones.
 
-Business concepts drive architecture.
+## Current Capabilities
 
-Technology exists only to implement those concepts.
+The current release provides the foundational capabilities required to support future platform development.
 
----
+Implemented features include:
 
-## Automation by Design
+### Platform Foundation
 
-Every repeatable operational workflow should eventually become automated.
+- FastAPI application bootstrap
+- Typed application configuration
+- Environment-based settings management
+- Lifecycle management
+- Centralized logging
 
-Human effort should be reserved for engineering decisions rather than repetitive execution.
+### Observability
 
----
-
-## API First
-
-All platform capabilities should be accessible through stable APIs.
-
-Presentation layers must never communicate directly with infrastructure.
-
----
-
-## Single Source of Truth
-
-Every concept should have one authoritative definition.
-
-Documentation, APIs, backend, frontend, infrastructure, monitoring, and automation must remain synchronized.
-
----
-
-## Infrastructure as Code
-
-Infrastructure should be reproducible, version-controlled, and provisioned automatically.
-
-Manual infrastructure changes should be minimized.
-
----
-
-## Observability by Default
-
-Logs, metrics, traces, alerts, and health information are architectural capabilities rather than optional additions.
-
----
-
-## Loose Coupling
-
-Components communicate through well-defined interfaces.
-
-Each component should evolve independently whenever practical.
-
----
-
-## Modularity
-
-Every component has one clear responsibility.
-
-Architecture should evolve through extension rather than redesign.
-
----
-
-## Cloud-Agnostic Core
-
-Business logic should remain independent from cloud providers wherever practical.
-
-Cloud-specific implementations belong behind abstraction layers.
-
----
-
-## Reproducibility
-
-Every deployment should behave consistently across local development, CI/CD, Kubernetes clusters, and cloud environments.
-
----
-
-# Ubiquitous Language
-
-| Term | Definition |
-|------|------------|
-| Environment | A complete operational lab |
-| Cluster | The execution environment for workloads |
-| Service | A deployable application component |
-| Incident | A simulated production failure |
-| Alert | A notification generated from system behavior |
-| Timeline | Chronological sequence of incident events |
-| Recovery | Restoration of normal system operation |
-| Runbook | Standard operating procedure for recovery |
-| RCA | Root Cause Analysis generated after recovery |
-
-All documentation, APIs, code, logs, dashboards, and metrics must use this terminology consistently.
-
----
-
-# Domain Model
-
-The platform revolves around a small number of business entities.
-
-These entities remain stable regardless of implementation technologies.
-
----
-
-## Environment
-
-### Purpose
-
-Represents an isolated operational workspace.
-
-### Responsibilities
-
-- Own infrastructure
-- Host workloads
-- Generate traffic
-- Contain incidents
-
----
-
-## Cluster
-
-### Purpose
-
-Represents the execution platform for deployed services.
-
-### Responsibilities
-
-- Run workloads
-- Manage deployments
-- Maintain operational state
-
----
-
-## Service
-
-### Purpose
-
-Represents a deployable workload participating in an incident simulation.
-
-### Responsibilities
-
-- Receive traffic
-- Produce logs
-- Expose metrics
-- Generate traces
-
----
-
-## Incident
-
-### Purpose
-
-Represents a simulated production failure.
-
-### Responsibilities
-
-- Track lifecycle
-- Trigger alerts
-- Associate logs and metrics
-- Record investigation timeline
-- Initiate recovery
-- Produce RCA
-
-### Lifecycle
-
-```
-Created
-    ↓
-Injected
-    ↓
-Detected
-    ↓
-Investigating
-    ↓
-Recovering
-    ↓
-Resolved
-    ↓
-Archived
-```
-
----
-
-## Alert
-
-### Purpose
-
-Represents abnormal system behavior requiring investigation.
-
----
-
-## Timeline
-
-### Purpose
-
-Maintains a chronological record of every incident event.
-
----
-
-## Recovery
-
-### Purpose
-
-Represents the operational workflow restoring system health.
-
----
-
-## Runbook
-
-### Purpose
-
-Represents standardized operational procedures for investigation and recovery.
-
----
-
-# High-Level Architecture
-
-The platform is organized into logical layers.
-
-```
-Presentation Layer
-        ↓
-Application Layer
-        ↓
-Domain Layer
-        ↓
-Infrastructure Layer
-        ↓
-Platform Layer
-```
-
-Each layer communicates only through clearly defined interfaces.
-
-Business logic must never depend directly on infrastructure implementations.
-
----
-
-# Core Components
-
-IncidentLab consists of several logical components.
-
-- User Interface
-- API Layer
-- Incident Engine
-- Environment Manager
-- Automation Engine
-- Observability Engine
-- Recovery Engine
-- Notification Engine
-- Infrastructure Layer
-
-Each component owns a single responsibility and exposes well-defined interfaces.
-
----
-
-# Component Interaction
-
-```
-User
-
-↓
-
-User Interface
-
-↓
-
-API Layer
-
-↓
-
-Application Services
-
-↓
-
-Domain Logic
-
-↓
-
-Automation Engine
-
-↓
-
-Infrastructure
-
-↓
-
-Observability
-
-↓
-
-Recovery
-
-↓
-
-Response
-```
-
-Every interaction follows this flow regardless of the underlying technology.
-
----
-
-# Request Lifecycle
-
-A typical incident follows this lifecycle.
-
-```
-Create Environment
-
-↓
-
-Deploy Services
-
-↓
-
-Generate Traffic
-
-↓
-
-Inject Incident
-
-↓
-
-Observe Metrics
-
-↓
-
-Investigate
-
-↓
-
-Recover
-
-↓
-
-Verify Recovery
-
-↓
-
-Generate RCA
-
-↓
-
-Archive Incident
-
-↓
-
-Reset Environment
-```
-
-This workflow defines the core operational experience of IncidentLab.
-
----
-
-# Automation Strategy
-
-Automation is a core architectural capability.
-
-The following workflows are expected to become fully automated over time.
-
-- Environment provisioning
-- Infrastructure deployment
-- Service deployment
-- Incident injection
-- Recovery execution
-- Verification
-- Testing
-- Documentation generation
-- Release management
-- CI/CD pipelines
-
-Automation should encapsulate complexity without hiding engineering decisions.
-
----
-
-# Security Architecture
-
-Security is integrated into the architecture rather than treated as a separate phase.
-
-Architectural principles include:
-
-- Least Privilege
-- Secret Isolation
-- Secure Defaults
-- Role-Based Access Control
-- Immutable Infrastructure where practical
-- Automated Security Validation
-
----
-
-# Observability Architecture
-
-Every meaningful system activity should be observable.
-
-Current implementation provides:
-
-- Application lifecycle logging
-- Centralized logging configuration
-- Configurable log levels
 - HTTP request logging middleware
+- Startup logging
+- Shutdown logging
+- Configurable log levels
 
-Future iterations will extend observability with:
+### API Foundation
 
-- Structured JSON logging
-- Metrics Collection
-- Distributed Tracing
-- Health Monitoring
-- Alerting
-- Incident Timeline Generation
-
-Observability exists before incidents occur.
-
----
-
-# Deployment Architecture
-
-IncidentLab is designed to evolve progressively.
-
-Development Flow
-
-```
-Local Development
-
-↓
-
-Containerized Environment
-
-↓
-
-Kubernetes
-
-↓
-
-Cloud Infrastructure
-
-↓
-
-Production-like Platform
-```
-
-The architecture remains stable while deployment strategies evolve.
+- Versioned API routing
+- Modular router composition
+- Health endpoint
+- Typed API response models
+- Service layer architecture
+- Separation of HTTP and business logic
 
 ---
 
-# Scalability Strategy
+# Functional Requirements
 
-The architecture should support incremental growth without major redesign.
+The platform shall:
 
-Future scalability considerations include:
-
-- Independent services
-- Multiple environments
-- Horizontal scaling
-- Cloud-native workloads
-- Distributed automation
-- Multi-user support
-
----
-
-# Architectural Decision Records (ADR)
-
-Major engineering decisions are documented separately.
-
-Examples include:
-
-- ADR-001 — Monorepo Strategy
-- ADR-002 — API First
-- ADR-003 — Local First Development
-- ADR-004 — GitLab CI/CD Adoption
-- ADR-005 — Automation by Design
-
-ADRs explain why decisions were made without cluttering this architecture document.
+- Expose versioned REST APIs.
+- Provide standardized API response models.
+- Maintain a dedicated service layer for application logic.
+- Centralize application configuration.
+- Support lifecycle initialization and graceful shutdown.
+- Record operational request logs.
+- Maintain modular application boundaries.
+- Support incremental feature expansion without major architectural changes.
 
 ---
 
-# Future Evolution
+# Non-Functional Requirements
 
-Future enhancements may include:
+The platform should satisfy the following engineering qualities.
 
-- AWS-native deployments
-- Multi-cloud support
-- GitOps workflows
-- AI-assisted incident analysis
-- Enterprise authentication
-- Team collaboration
-- Advanced incident scenarios
-- Plugin ecosystem
+## Maintainability
 
-These enhancements should extend the architecture rather than redefine it.
+Components should remain modular, readable, and independently testable.
 
 ---
 
-# Architecture Statement
+## Scalability
 
-IncidentLab is not designed to demonstrate individual technologies.
+The architecture should support future services without requiring structural redesign.
 
-It is designed to demonstrate how modern engineering systems are architected, automated, observed, operated, and continuously improved as a cohesive production platform.
+---
 
-Every architectural decision should reinforce this objective.
+## Observability
+
+Operational behavior should be visible through structured application logging.
+
+---
+
+## Consistency
+
+Application responses should follow typed contracts wherever possible.
+
+---
+
+## Extensibility
+
+New platform capabilities should integrate naturally into the existing architecture.
+
+---
+
+## Documentation
+
+Engineering documentation should evolve alongside implementation and accurately represent the current platform state.
+
+---
+
+# Current Scope
+
+The current implementation focuses on establishing a solid architectural foundation.
+
+Included within the current scope:
+
+- Application initialization
+- Configuration management
+- Lifecycle management
+- Logging
+- Request middleware
+- Versioned API routing
+- Service layer
+- Response schemas
+- Health endpoint
+
+---
+
+# Planned Scope
+
+Future engineering milestones will introduce additional platform capabilities.
+
+Planned areas include:
+
+## Error Handling
+
+- Global exception handlers
+- Standard error responses
+- Custom application exceptions
+
+---
+
+## Dependency Management
+
+- Shared dependency providers
+- Dependency injection
+- Request-scoped services
+
+---
+
+## Persistence
+
+- Database integration
+- SQLAlchemy ORM
+- Alembic migrations
+- Repository pattern
+
+---
+
+## Authentication
+
+- JWT authentication
+- Authorization
+- Role-based access control
+
+---
+
+## Incident Operations
+
+- Incident lifecycle management
+- Incident timeline
+- Root Cause Analysis (RCA)
+- Operational runbooks
+
+---
+
+## Platform Integrations
+
+- Cloud providers
+- Kubernetes
+- Terraform
+- External APIs
+- Event-driven workflows
+
+---
+
+## Observability
+
+- Metrics
+- Distributed tracing
+- Health monitoring
+- Audit logging
+
+---
+
+# Out of Scope
+
+The current platform intentionally does not include:
+
+- User management
+- Authentication
+- Database persistence
+- Background workers
+- Event queues
+- Distributed services
+- Multi-tenancy
+- Real-time communication
+- Production deployment infrastructure
+
+These capabilities will be introduced only when supported by future architectural milestones.
+
+---
+
+# Success Criteria
+
+IncidentLab will be considered successful when it demonstrates:
+
+- Clear architectural boundaries.
+- Production-oriented engineering practices.
+- Incremental platform evolution.
+- Maintainable code organization.
+- Consistent API design.
+- Strong operational visibility.
+- High-quality engineering documentation.
+
+Success is measured by architectural quality and operational maturity rather than feature count alone.
+
+---
+
+# Product Evolution
+
+IncidentLab is intentionally developed through iterative engineering sprints.
+
+Each sprint introduces one architectural capability while preserving the stability of existing components.
+
+This incremental approach allows the platform to grow predictably, reduces unnecessary complexity, and ensures that engineering decisions remain deliberate as the system evolves.
+
+The product requirements defined in this document will continue to evolve alongside the platform while remaining aligned with its long-term vision.
