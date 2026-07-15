@@ -4,6 +4,8 @@ IncidentLab is a production-oriented cloud incident simulation platform designed
 
 The project focuses on developing ownership mindset, operational excellence, observability, infrastructure automation, and incident response practices rather than showcasing individual technologies.
 
+---
+
 ## Vision
 
 Build a platform where engineers can:
@@ -16,11 +18,24 @@ Build a platform where engineers can:
 - Execute recovery workflows
 - Generate Root Cause Analysis (RCA)
 
+---
+
 ## Project Status
 
 Current Phase:
 
-**Sprint-0 — Foundation Completed**
+**Sprint 2 — Platform Operations Foundation Completed**
+
+Current capabilities include:
+
+- FastAPI backend bootstrap
+- Typed configuration (Pydantic Settings)
+- Application lifecycle management
+- Centralized logging
+- HTTP request logging middleware
+- Health endpoint
+
+---
 
 ## Documentation
 
@@ -29,6 +44,8 @@ Current Phase:
 - docs/architecture.md
 - docs/roadmap.md
 - docs/adr/
+
+---
 
 ## Tech Stack (Planned)
 
@@ -46,16 +63,13 @@ Current Phase:
 - Loki
 - Tempo
 
+---
+
 ## Project Philosophy
 
-Automation First.
-
-Documentation Driven.
-
-API First.
-
-Infrastructure as Code.
-
-Observability by Default.
-
-Continuous Improvement.
+- Automation First
+- Documentation Driven
+- API First
+- Infrastructure as Code
+- Observability by Default
+- Continuous Improvement

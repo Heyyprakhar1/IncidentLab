@@ -23,9 +23,28 @@ It is responsible for exposing APIs that simulate cloud incidents, orchestrate i
 - Python
 - FastAPI
 - uv
-- PostgreSQL
-- Redis
+- Pydantic Settings
 - Docker
+
+---
+
+## Current Phase
+
+**Sprint 2 — Platform Operations Foundation**
+
+---
+
+## Current Capabilities
+
+The backend currently provides:
+
+- FastAPI application bootstrap
+- Typed configuration using Pydantic Settings
+- Health endpoint
+- Application lifecycle management
+- Centralized logging configuration
+- Configurable log levels
+- HTTP request logging middleware
 
 ---
 
@@ -34,18 +53,37 @@ It is responsible for exposing APIs that simulate cloud incidents, orchestrate i
 ```text
 api/
 ├── app/
-├── tests/
+│   ├── config.py
+│   ├── lifespan.py
+│   ├── logging_config.py
+│   ├── middleware/
+│   │   ├── __init__.py
+│   │   └── request_logging.py
+│   └── main.py
 ├── Dockerfile
 ├── pyproject.toml
+├── uv.lock
 └── README.md
 ```
 
 ---
 
-## Development Status
+## Operational Capabilities
 
-Current Phase:
+Current observability includes:
 
-**Sprint 1 — API Bootstrap**
+- Startup logging
+- Shutdown logging
+- HTTP request logging
+- Request duration logging
+- Client IP logging
+- Configurable log levels
 
-The current objective is to establish a clean backend foundation before implementing business logic.
+Future iterations will introduce:
+
+- Structured JSON logging
+- Correlation IDs
+- Distributed tracing
+- Metrics
+- Dashboards
+- Alerting

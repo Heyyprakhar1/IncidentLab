@@ -4,19 +4,21 @@ This directory contains the core engineering documentation for IncidentLab.
 
 ## Documents
 
-| Document | Purpose |
-|----------|---------|
-| vision.md | Long-term vision of the platform |
-| product-requirements.md | Functional and product requirements |
-| architecture.md | System architecture and engineering principles |
-| roadmap.md | Development roadmap and milestones |
-| adr/ | Architectural Decision Records |
-| diagrams/ | Architecture and system diagrams |
+| Document | Purpose | Status |
+|----------|---------|--------|
+| vision.md | Long-term vision of the platform | Stable |
+| product-requirements.md | Functional and product requirements | Stable |
+| architecture.md | System architecture and engineering principles | Updated (Sprint 2) |
+| roadmap.md | Development roadmap and milestones | Updated |
+| adr/ | Architectural Decision Records | Active |
+
+---
 
 ## Documentation Principles
 
-- Keep documentation concise.
+- Documentation drives implementation.
 - Avoid duplication.
-- Documentation should support implementation.
-- Architecture should drive development.
-- Update documentation only when product or architecture changes.
+- Keep documentation concise.
+- Architecture should guide development.
+- Update documentation when product or architecture changes.
+- The `main` branch always represents the project's official state.
