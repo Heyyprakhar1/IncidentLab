@@ -27,23 +27,26 @@ API resources.
 
 from fastapi import APIRouter
 
-from app.config import settings
+from app.schemas import HealthResponse
+from app.services import HealthService
 
 router = APIRouter(
     prefix="/health",
     tags=["Health"],
 )
 
+health_service = HealthService()
 
-@router.get("/")
-async def health():
+
+@router.get(
+    "",
+    response_model=HealthResponse,
+    summary="Health Check",
+    description="Return the operational status of the IncidentLab API.",
+)
+async def health() -> HealthResponse:
     """
     Return the current health status of the API.
     """
 
-    return {
-        "status": "healthy",
-        "service": settings.app_name,
-        "version": settings.app_version,
-        "environment": settings.app_env,
-    }
+    return health_service.get_health()
