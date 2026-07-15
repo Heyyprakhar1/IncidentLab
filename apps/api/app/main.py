@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from app.config import settings
 from app.lifespan import lifespan
-
+from app.middleware.request_logging import RequestLoggingMiddleware
 
 app = FastAPI(
     lifespan=lifespan,
@@ -10,6 +10,8 @@ app = FastAPI(
     description=settings.app_description,
     version=settings.app_version,
 )
+
+app.add_middleware(RequestLoggingMiddleware)
 
 
 @app.get("/health")
