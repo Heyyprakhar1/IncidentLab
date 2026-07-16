@@ -1,0 +1,7 @@
+"""
+Application ORM models.
+"""
+
+from app.models.incident import Incident
+
+__all__ = ["Incident"]
