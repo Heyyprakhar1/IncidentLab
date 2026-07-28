@@ -1,0 +1,56 @@
+"""
+Incident application service.
+
+Purpose
+-------
+Provide application services for Incident resources.
+
+Responsibilities
+----------------
+- Coordinate incident-related business operations.
+- Delegate persistence to the repository layer.
+- Return API response models.
+
+Non-Responsibilities
+--------------------
+- HTTP request handling.
+- Database queries.
+- ORM model definitions.
+
+Notes
+-----
+The service layer represents the application's business use cases.
+"""
+
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.models import Incident
+from app.repositories import IncidentRepository
+from app.schemas import IncidentCreate, IncidentResponse
+
+
+class IncidentService:
+    """
+    Application service for Incident operations.
+    """
+
+    def __init__(self, db: AsyncSession):
+        self.repository = IncidentRepository(db)
+
+    async def create_incident(
+        self,
+        incident: IncidentCreate,
+    ) -> IncidentResponse:
+        """
+        Create a new incident.
+        """
+
+        db_incident = Incident(
+            title=incident.title,
+            description=incident.description,
+            severity=incident.severity,
+        )
+
+        created_incident = await self.repository.create(db_incident)
+
+        return IncidentResponse.model_validate(created_incident)
