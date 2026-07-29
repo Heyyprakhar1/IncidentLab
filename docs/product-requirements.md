@@ -6,7 +6,7 @@ This document defines the functional scope, product objectives, and engineering 
 
 It serves as the reference point for understanding what the platform is intended to build, who it is designed for, and how its capabilities are expected to evolve over time.
 
-Unlike the architecture documentation, this document focuses on **product requirements** rather than implementation details.
+Unlike the Architecture document, this document focuses on **product capabilities and engineering requirements** rather than implementation details.
 
 ---
 
@@ -56,8 +56,6 @@ The platform will evolve through multiple engineering milestones.
 
 The current release provides the foundational capabilities required to support future platform development.
 
-Implemented features include:
-
 ### Platform Foundation
 
 - FastAPI application bootstrap
@@ -78,9 +76,19 @@ Implemented features include:
 - Versioned API routing
 - Modular router composition
 - Health endpoint
-- Typed API response models
+- Typed request schemas
+- Typed response schemas
 - Service layer architecture
-- Separation of HTTP and business logic
+
+### Persistence Foundation
+
+- SQLAlchemy ORM integration
+- Alembic database migrations
+- Repository pattern
+- Database session management
+- Persistent Incident entities
+- Incident creation
+- Incident listing
 
 ---
 
@@ -89,10 +97,13 @@ Implemented features include:
 The platform shall:
 
 - Expose versioned REST APIs.
-- Provide standardized API response models.
-- Maintain a dedicated service layer for application logic.
+- Validate incoming API requests.
+- Return standardized API responses.
+- Maintain a dedicated service layer for business logic.
+- Persist application data using a relational database.
+- Encapsulate database access through repositories.
+- Support schema evolution through database migrations.
 - Centralize application configuration.
-- Support lifecycle initialization and graceful shutdown.
 - Record operational request logs.
 - Maintain modular application boundaries.
 - Support incremental feature expansion without major architectural changes.
@@ -141,27 +152,31 @@ Engineering documentation should evolve alongside implementation and accurately 
 
 # Current Scope
 
-The current implementation focuses on establishing a solid architectural foundation.
-
-Included within the current scope:
+The current implementation includes:
 
 - Application initialization
 - Configuration management
 - Lifecycle management
-- Logging
+- Structured logging
 - Request middleware
 - Versioned API routing
-- Service layer
-- Response schemas
 - Health endpoint
+- Typed request schemas
+- Typed response schemas
+- Service layer
+- Repository layer
+- SQLAlchemy ORM
+- Alembic migrations
+- Database session management
+- Incident persistence
+- Incident creation
+- Incident listing
 
 ---
 
 # Planned Scope
 
 Future engineering milestones will introduce additional platform capabilities.
-
-Planned areas include:
 
 ## Error Handling
 
@@ -179,12 +194,12 @@ Planned areas include:
 
 ---
 
-## Persistence
+## Incident Operations
 
-- Database integration
-- SQLAlchemy ORM
-- Alembic migrations
-- Repository pattern
+- Incident updates
+- Incident deletion
+- Incident lifecycle management
+- Incident status transitions
 
 ---
 
@@ -196,18 +211,18 @@ Planned areas include:
 
 ---
 
-## Incident Operations
+## Operational Intelligence
 
-- Incident lifecycle management
-- Incident timeline
 - Root Cause Analysis (RCA)
 - Operational runbooks
+- Audit logging
+- Incident history
 
 ---
 
 ## Platform Integrations
 
-- Cloud providers
+- AWS
 - Kubernetes
 - Terraform
 - External APIs
@@ -220,7 +235,7 @@ Planned areas include:
 - Metrics
 - Distributed tracing
 - Health monitoring
-- Audit logging
+- Performance dashboards
 
 ---
 
@@ -230,7 +245,6 @@ The current platform intentionally does not include:
 
 - User management
 - Authentication
-- Database persistence
 - Background workers
 - Event queues
 - Distributed services
@@ -251,6 +265,7 @@ IncidentLab will be considered successful when it demonstrates:
 - Incremental platform evolution.
 - Maintainable code organization.
 - Consistent API design.
+- Reliable data persistence.
 - Strong operational visibility.
 - High-quality engineering documentation.
 

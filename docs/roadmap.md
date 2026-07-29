@@ -16,8 +16,8 @@ The roadmap is intentionally iterative. Every release builds upon the previous o
 
 | Item | Status |
 |------|--------|
-| Current Version | **v0.3.0** |
-| Current Phase | API Foundation |
+| Current Version | **v0.4.0** |
+| Current Phase | Persistence Foundation |
 | Architecture | Modular Layered Architecture |
 | Development Model | Sprint-based Incremental Evolution |
 
@@ -27,11 +27,11 @@ The roadmap is intentionally iterative. Every release builds upon the previous o
 
 ## v0.1.0 — Repository Foundation ✅
 
-Objective
+### Objective
 
 Establish the project foundation and engineering documentation.
 
-Delivered
+### Delivered
 
 - Repository structure
 - Initial project documentation
@@ -39,7 +39,7 @@ Delivered
 - Product direction
 - Initial roadmap
 
-Outcome
+### Outcome
 
 The project gained a documented foundation that defines its long-term purpose and development philosophy.
 
@@ -47,27 +47,27 @@ The project gained a documented foundation that defines its long-term purpose an
 
 ## v0.2.0 — Platform Operations Foundation ✅
 
-Objective
+### Objective
 
 Create a production-ready FastAPI application foundation.
 
-Delivered
+### Delivered
 
-### Platform
+#### Platform
 
 - FastAPI application bootstrap
 - Typed configuration
 - Environment management
 - Lifespan management
 
-### Observability
+#### Observability
 
 - Structured logging
 - Startup logging
 - Shutdown logging
 - HTTP request logging middleware
 
-Outcome
+### Outcome
 
 IncidentLab became an operational application rather than a project skeleton.
 
@@ -75,94 +75,105 @@ IncidentLab became an operational application rather than a project skeleton.
 
 ## v0.3.0 — API Foundation ✅
 
-Objective
+### Objective
 
 Establish a scalable API architecture suitable for future platform capabilities.
 
-Delivered
+### Delivered
 
-### API
+#### API
 
 - Versioned routing
 - Router composition
 - Health endpoint
 
-### Architecture
+#### Architecture
 
 - Service layer
-- Typed response schemas
+- Typed request and response schemas
 - Separation of HTTP and business logic
 
-Outcome
+### Outcome
 
-The API now follows a layered architecture that supports future expansion without requiring significant structural refactoring.
+The API adopted a layered architecture capable of supporting future business capabilities without structural refactoring.
+
+---
+
+## v0.4.0 — Persistence Foundation ✅
+
+### Objective
+
+Introduce persistent storage while preserving clear architectural boundaries.
+
+### Delivered
+
+#### Persistence
+
+- SQLAlchemy ORM
+- Declarative models
+- Async database sessions
+- Alembic migrations
+- Repository layer
+
+#### Business Workflows
+
+- Incident creation
+- Incident listing
+
+### Outcome
+
+IncidentLab evolved from a stateless API into a persistence-backed backend application with its first complete business workflow.
 
 ---
 
 # Current Development Focus
 
-The platform is currently focused on strengthening the API foundation before introducing persistence and operational workflows.
+The platform is currently focused on expanding incident management capabilities on top of the established persistence foundation.
 
 Priority areas include:
 
+- Incident update operations
+- Incident deletion
+- Status transitions
+- Validation improvements
 - Standardized error handling
-- Dependency injection
-- Shared application dependencies
-- API consistency
-- Improved request lifecycle management
 
 ---
 
 # Upcoming Milestones
 
-## v0.4.0 — Application Foundation
+## v0.5.0 — Application Foundation
 
-Planned capabilities
+### Planned Capabilities
 
-### Error Handling
+#### Error Handling
 
 - Global exception handlers
 - Standard error response models
 - Custom application exceptions
 
-### Dependencies
+#### Dependencies
 
 - Shared dependency providers
 - Dependency injection
 - Request-scoped resources
 
-Goal
+### Goal
 
 Provide a consistent execution model for every API endpoint.
 
 ---
 
-## v0.5.0 — Persistence Layer
-
-Planned capabilities
-
-- Database integration
-- SQLAlchemy ORM
-- Alembic migrations
-- Repository layer
-- Session management
-
-Goal
-
-Introduce persistent application data while maintaining clear architectural boundaries.
-
----
-
 ## v0.6.0 — Authentication & Authorization
 
-Planned capabilities
+### Planned Capabilities
 
 - JWT authentication
 - User identity
 - Authorization
 - Role-based access control
 
-Goal
+### Goal
 
 Secure platform resources using production-inspired authentication patterns.
 
@@ -170,23 +181,23 @@ Secure platform resources using production-inspired authentication patterns.
 
 ## v0.7.0 — Incident Management
 
-Planned capabilities
+### Planned Capabilities
 
-- Incident creation
 - Incident updates
+- Incident deletion
 - Incident lifecycle
 - Incident status management
 - Timeline events
 
-Goal
+### Goal
 
-Introduce the platform's first core business capability.
+Expand the initial incident workflow into a complete incident management system.
 
 ---
 
 ## v0.8.0 — Operational Intelligence
 
-Planned capabilities
+### Planned Capabilities
 
 - Root Cause Analysis (RCA)
 - Runbooks
@@ -194,24 +205,24 @@ Planned capabilities
 - Incident history
 - Operational insights
 
-Goal
+### Goal
 
 Expand IncidentLab beyond incident tracking into operational ownership.
 
 ---
 
-## Future Platform Evolution
+# Future Platform Evolution
 
 As the platform matures, future releases may introduce:
 
-### Observability
+## Observability
 
 - Metrics
 - Distributed tracing
 - Health monitoring
 - Performance dashboards
 
-### Platform Integrations
+## Platform Integrations
 
 - AWS
 - Kubernetes
@@ -219,7 +230,7 @@ As the platform matures, future releases may introduce:
 - External APIs
 - Event-driven workflows
 
-### Automation
+## Automation
 
 - Background workers
 - Scheduled jobs
@@ -248,7 +259,7 @@ Each milestone delivers a complete, stable improvement rather than partially imp
 
 ## Stable Releases
 
-Every version should represent a deployable and maintainable platform state.
+Every version represents a deployable and maintainable platform state.
 
 ---
 

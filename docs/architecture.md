@@ -1,269 +1,350 @@
-# Product Requirements
+# Architecture
 
 ## Purpose
 
-This document defines the functional scope, product objectives, and engineering requirements for IncidentLab.
+This document describes the current software architecture of IncidentLab.
 
-It serves as the reference point for understanding what the platform is intended to build, who it is designed for, and how its capabilities are expected to evolve over time.
+It explains how the platform is organized, how responsibilities are separated, and how application components collaborate to deliver business capabilities.
 
-Unlike the architecture documentation, this document focuses on **product requirements** rather than implementation details.
-
----
-
-# Product Overview
-
-IncidentLab is an Operations Ownership Platform that explores how modern cloud-native systems are designed, operated, observed, and continuously improved.
-
-The platform is being developed incrementally through engineering sprints, with each milestone introducing a focused capability while maintaining architectural consistency and operational quality.
-
-Rather than serving as a traditional CRUD application, IncidentLab is intended to model the operational concerns encountered throughout the lifecycle of production systems.
+Unlike the Product Requirements document, this document focuses on implementation structure and architectural decisions rather than product goals.
 
 ---
 
-# Product Objectives
+# Architectural Overview
 
-The primary objectives of IncidentLab are to:
+IncidentLab follows a **layered architecture** designed to promote maintainability, modularity, and clear separation of concerns.
 
-- Build a maintainable cloud-native platform.
-- Promote operational ownership over infrastructure provisioning.
-- Provide a realistic foundation for incident investigation workflows.
-- Encourage production-inspired engineering practices.
-- Maintain a modular and evolvable software architecture.
-- Document architectural decisions alongside implementation.
+Each layer owns a single responsibility and communicates only with the adjacent layer.
+
+The architecture intentionally isolates HTTP handling from business logic and persistence, allowing the platform to evolve without widespread structural changes.
 
 ---
 
-# Target Users
+# Architecture Principles
 
-IncidentLab is intended for engineers who are interested in designing and operating modern distributed systems.
+The platform is built around several architectural principles.
 
-Primary users include:
+## Single Responsibility
 
-- Platform Engineers
-- DevOps Engineers
-- Site Reliability Engineers (SREs)
-- Cloud Engineers
-- Backend Engineers
-- Engineering teams responsible for operational excellence
+Every module should own one responsibility.
+
+Examples include:
+
+- API routers own HTTP routing.
+- Services own business use cases.
+- Repositories own database interaction.
+- Models define persisted entities.
+- Schemas define API contracts.
+- Configuration manages application settings.
+
+Responsibilities should not overlap.
 
 ---
 
-# Product Capabilities
+## Separation of Concerns
 
-The platform will evolve through multiple engineering milestones.
+Business rules should remain independent of HTTP handling and database implementation.
 
-## Current Capabilities
+Each architectural layer has a clearly defined purpose.
 
-The current release provides the foundational capabilities required to support future platform development.
+---
 
-Implemented features include:
+## Layered Design
 
-### Platform Foundation
+Application behavior flows through dedicated layers.
+
+```text
+HTTP Request
+      │
+      ▼
+API Router
+      │
+      ▼
+Application Service
+      │
+      ▼
+Repository
+      │
+      ▼
+SQLAlchemy ORM
+      │
+      ▼
+Database
+```
+
+Each layer performs one responsibility before delegating work to the next layer.
+
+---
+
+## Dependency Direction
+
+Dependencies always flow downward.
+
+```text
+API
+ │
+ ▼
+Services
+ │
+ ▼
+Repositories
+ │
+ ▼
+Database
+```
+
+Lower layers never depend on higher layers.
+
+This keeps business logic reusable and minimizes coupling between application components.
+
+---
+
+# Application Structure
+
+The current API application is organized as follows.
+
+```text
+app/
+
+├── api/
+│   └── v1/
+│       ├── endpoints/
+│       └── router.py
+│
+├── core/
+│
+├── db/
+│
+├── middleware/
+│
+├── models/
+│
+├── repositories/
+│
+├── schemas/
+│
+├── services/
+│
+├── config.py
+├── lifespan.py
+├── logging_config.py
+└── main.py
+```
+
+Each directory represents a distinct architectural responsibility.
+
+---
+
+# Layer Responsibilities
+
+## API Layer
+
+The API layer receives HTTP requests and returns HTTP responses.
+
+Responsibilities include:
+
+- Route registration
+- Request validation
+- Response serialization
+- Dependency injection
+- Delegating work to application services
+
+The API layer contains no business logic.
+
+---
+
+## Service Layer
+
+The service layer represents application use cases.
+
+Responsibilities include:
+
+- Coordinating business operations
+- Constructing domain entities
+- Calling repositories
+- Returning API response models
+
+The service layer does not perform database queries directly.
+
+---
+
+## Repository Layer
+
+Repositories encapsulate all persistence operations.
+
+Responsibilities include:
+
+- Creating records
+- Retrieving records
+- Updating records
+- Deleting records
+- Managing ORM queries
+
+Repositories isolate SQLAlchemy usage from the rest of the application.
+
+---
+
+## Model Layer
+
+Models represent persisted database entities.
+
+Responsibilities include:
+
+- Database table definitions
+- ORM mappings
+- Entity representation
+
+Models do not contain business logic.
+
+---
+
+## Schema Layer
+
+Schemas define the public API contract.
+
+Responsibilities include:
+
+- Request validation
+- Response serialization
+- Data transformation
+
+Schemas are independent of database implementation.
+
+---
+
+## Database Layer
+
+The database layer provides persistence infrastructure.
+
+Current responsibilities include:
+
+- SQLAlchemy ORM configuration
+- Declarative model registration
+- Database session management
+- Alembic migration support
+
+This layer provides a stable foundation for future persistence requirements.
+
+---
+
+# Request Lifecycle
+
+A typical request follows the workflow below.
+
+```text
+Client
+   │
+   ▼
+Router
+   │
+   ▼
+Service
+   │
+   ▼
+Repository
+   │
+   ▼
+Database
+   │
+   ▼
+Repository
+   │
+   ▼
+Service
+   │
+   ▼
+Response Schema
+   │
+   ▼
+Client
+```
+
+Each layer contributes one clearly defined responsibility.
+
+---
+
+# Current Architectural Capabilities
+
+The current implementation provides:
+
+## Platform Foundation
 
 - FastAPI application bootstrap
-- Typed application configuration
-- Environment-based settings management
+- Typed configuration
 - Lifecycle management
-- Centralized logging
+- Structured logging
 
-### Observability
+---
 
-- HTTP request logging middleware
-- Startup logging
-- Shutdown logging
-- Configurable log levels
+## API Foundation
 
-### API Foundation
-
-- Versioned API routing
+- Versioned routing
 - Modular router composition
-- Health endpoint
-- Typed API response models
+- Typed request schemas
+- Typed response schemas
 - Service layer architecture
-- Separation of HTTP and business logic
 
 ---
 
-# Functional Requirements
+## Persistence Foundation
 
-The platform shall:
-
-- Expose versioned REST APIs.
-- Provide standardized API response models.
-- Maintain a dedicated service layer for application logic.
-- Centralize application configuration.
-- Support lifecycle initialization and graceful shutdown.
-- Record operational request logs.
-- Maintain modular application boundaries.
-- Support incremental feature expansion without major architectural changes.
+- SQLAlchemy ORM
+- Alembic migrations
+- Repository pattern
+- Database session management
+- Persistent Incident entities
 
 ---
 
-# Non-Functional Requirements
+# Architectural Benefits
 
-The platform should satisfy the following engineering qualities.
+The current architecture provides several engineering advantages.
 
 ## Maintainability
 
-Components should remain modular, readable, and independently testable.
+Components remain small, focused, and independently understandable.
 
 ---
 
-## Scalability
+## Testability
 
-The architecture should support future services without requiring structural redesign.
-
----
-
-## Observability
-
-Operational behavior should be visible through structured application logging.
-
----
-
-## Consistency
-
-Application responses should follow typed contracts wherever possible.
+Business logic can be tested independently from HTTP routing and persistence.
 
 ---
 
 ## Extensibility
 
-New platform capabilities should integrate naturally into the existing architecture.
+New capabilities can be introduced by extending existing layers rather than restructuring the application.
 
 ---
 
-## Documentation
+## Consistency
 
-Engineering documentation should evolve alongside implementation and accurately represent the current platform state.
-
----
-
-# Current Scope
-
-The current implementation focuses on establishing a solid architectural foundation.
-
-Included within the current scope:
-
-- Application initialization
-- Configuration management
-- Lifecycle management
-- Logging
-- Request middleware
-- Versioned API routing
-- Service layer
-- Response schemas
-- Health endpoint
+Every feature follows the same architectural workflow from request to persistence.
 
 ---
 
-# Planned Scope
+# Future Evolution
 
-Future engineering milestones will introduce additional platform capabilities.
+Future milestones are expected to build upon the current layered architecture.
 
-Planned areas include:
+Planned additions include:
 
-## Error Handling
-
-- Global exception handlers
-- Standard error responses
-- Custom application exceptions
-
----
-
-## Dependency Management
-
-- Shared dependency providers
-- Dependency injection
-- Request-scoped services
-
----
-
-## Persistence
-
-- Database integration
-- SQLAlchemy ORM
-- Alembic migrations
-- Repository pattern
-
----
-
-## Authentication
-
-- JWT authentication
-- Authorization
-- Role-based access control
-
----
-
-## Incident Operations
-
-- Incident lifecycle management
-- Incident timeline
-- Root Cause Analysis (RCA)
-- Operational runbooks
-
----
-
-## Platform Integrations
-
-- Cloud providers
-- Kubernetes
-- Terraform
-- External APIs
-- Event-driven workflows
-
----
-
-## Observability
-
-- Metrics
-- Distributed tracing
-- Health monitoring
-- Audit logging
-
----
-
-# Out of Scope
-
-The current platform intentionally does not include:
-
-- User management
+- Global exception handling
 - Authentication
-- Database persistence
-- Background workers
-- Event queues
-- Distributed services
-- Multi-tenancy
-- Real-time communication
-- Production deployment infrastructure
+- Authorization
+- Incident lifecycle management
+- Audit logging
+- Background processing
+- Event-driven workflows
+- Observability enhancements
 
-These capabilities will be introduced only when supported by future architectural milestones.
-
----
-
-# Success Criteria
-
-IncidentLab will be considered successful when it demonstrates:
-
-- Clear architectural boundaries.
-- Production-oriented engineering practices.
-- Incremental platform evolution.
-- Maintainable code organization.
-- Consistent API design.
-- Strong operational visibility.
-- High-quality engineering documentation.
-
-Success is measured by architectural quality and operational maturity rather than feature count alone.
+These capabilities will integrate into the existing architecture without changing the established layer boundaries.
 
 ---
 
-# Product Evolution
+# Summary
 
-IncidentLab is intentionally developed through iterative engineering sprints.
+IncidentLab currently follows a modular layered architecture that separates HTTP handling, business logic, persistence, and database concerns into dedicated components.
 
-Each sprint introduces one architectural capability while preserving the stability of existing components.
-
-This incremental approach allows the platform to grow predictably, reduces unnecessary complexity, and ensures that engineering decisions remain deliberate as the system evolves.
-
-The product requirements defined in this document will continue to evolve alongside the platform while remaining aligned with its long-term vision.
+This architecture provides a stable foundation for incremental platform evolution while preserving maintainability, operational clarity, and long-term scalability.
