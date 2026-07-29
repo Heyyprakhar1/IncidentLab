@@ -10,6 +10,7 @@ Responsibilities
 - Create the FastAPI application.
 - Register application lifecycle management.
 - Register middleware.
+- Register exception handlers.
 - Register API routers.
 
 Non-Responsibilities
@@ -18,6 +19,7 @@ Non-Responsibilities
 - API endpoint implementation
 - Logging configuration
 - Application configuration
+- Exception implementation
 
 Notes
 -----
@@ -31,8 +33,10 @@ from fastapi import FastAPI
 
 from app.api.v1.router import api_router
 from app.config import settings
+from app.exceptions.handlers import register_exception_handlers
 from app.lifespan import lifespan
 from app.middleware.request_logging import RequestLoggingMiddleware
+
 
 app = FastAPI(
     lifespan=lifespan,
@@ -41,8 +45,14 @@ app = FastAPI(
     version=settings.app_version,
 )
 
+
 # Register middleware.
 app.add_middleware(RequestLoggingMiddleware)
+
+
+# Register exception handlers.
+register_exception_handlers(app)
+
 
 # Register API routes.
 app.include_router(api_router)

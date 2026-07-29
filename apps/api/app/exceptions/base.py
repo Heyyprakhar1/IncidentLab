@@ -1,0 +1,21 @@
+"""
+Base application exceptions.
+"""
+
+
+class IncidentLabException(Exception):
+    """
+    Base exception for all application-level errors.
+    """
+
+    def __init__(
+        self,
+        status_code: int,
+        code: str,
+        message: str,
+    ) -> None:
+        self.status_code = status_code
+        self.code = code
+        self.message = message
+
+        super().__init__(message)

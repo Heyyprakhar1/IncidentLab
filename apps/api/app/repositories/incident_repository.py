@@ -40,14 +40,6 @@ class IncidentRepository:
     """
 
     def __init__(self, db: AsyncSession) -> None:
-        """
-        Initialize the repository.
-
-        Parameters
-        ----------
-        db:
-            Active SQLAlchemy asynchronous database session.
-        """
         self.db = db
 
     async def create(
@@ -56,17 +48,6 @@ class IncidentRepository:
     ) -> Incident:
         """
         Persist a new incident.
-
-        Responsibilities
-        ----------------
-        - Insert a new incident.
-        - Commit the transaction.
-        - Refresh the ORM object.
-
-        Returns
-        -------
-        Incident
-            The persisted incident.
         """
 
         self.db.add(incident)
@@ -82,15 +63,6 @@ class IncidentRepository:
     ) -> list[Incident]:
         """
         Retrieve all incidents.
-
-        Responsibilities
-        ----------------
-        - Fetch all persisted incidents.
-
-        Returns
-        -------
-        list[Incident]
-            Collection of persisted incidents.
         """
 
         result = await self.db.execute(
@@ -98,3 +70,29 @@ class IncidentRepository:
         )
 
         return result.scalars().all()
+
+    async def get_by_id(
+        self,
+        incident_id: int,
+    ) -> Incident | None:
+        """
+        Retrieve a single incident by identifier.
+
+        Responsibilities
+        ----------------
+        - Fetch an incident by its identifier.
+
+        Returns
+        -------
+        Incident | None
+            The matching incident if it exists;
+            otherwise None.
+        """
+
+        result = await self.db.execute(
+            select(Incident).where(
+                Incident.id == incident_id
+            )
+        )
+
+        return result.scalar_one_or_none()
