@@ -28,6 +28,7 @@ Application services should interact with repositories instead of
 issuing ORM queries directly.
 """
 
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.incident import Incident
@@ -75,3 +76,25 @@ class IncidentRepository:
         await self.db.refresh(incident)
 
         return incident
+
+    async def list(
+        self,
+    ) -> list[Incident]:
+        """
+        Retrieve all incidents.
+
+        Responsibilities
+        ----------------
+        - Fetch all persisted incidents.
+
+        Returns
+        -------
+        list[Incident]
+            Collection of persisted incidents.
+        """
+
+        result = await self.db.execute(
+            select(Incident)
+        )
+
+        return result.scalars().all()

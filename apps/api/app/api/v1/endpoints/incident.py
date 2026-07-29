@@ -26,7 +26,10 @@ from app.core.database import get_db
 from app.schemas import IncidentCreate, IncidentResponse
 from app.services import IncidentService
 
-router = APIRouter(prefix="/incidents", tags=["Incidents"])
+router = APIRouter(
+    prefix="/incidents",
+    tags=["Incidents"],
+)
 
 
 @router.post(
@@ -45,3 +48,20 @@ async def create_incident(
     service = IncidentService(db)
 
     return await service.create_incident(incident)
+
+
+@router.get(
+    "",
+    response_model=list[IncidentResponse],
+    status_code=status.HTTP_200_OK,
+)
+async def list_incidents(
+    db: AsyncSession = Depends(get_db),
+) -> list[IncidentResponse]:
+    """
+    Retrieve all incidents.
+    """
+
+    service = IncidentService(db)
+
+    return await service.list_incidents()

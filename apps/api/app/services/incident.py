@@ -51,6 +51,24 @@ class IncidentService:
             severity=incident.severity,
         )
 
-        created_incident = await self.repository.create(db_incident)
+        created_incident = await self.repository.create(
+            db_incident
+        )
 
-        return IncidentResponse.model_validate(created_incident)
+        return IncidentResponse.model_validate(
+            created_incident
+        )
+
+    async def list_incidents(
+        self,
+    ) -> list[IncidentResponse]:
+        """
+        Retrieve all incidents.
+        """
+
+        incidents = await self.repository.list()
+
+        return [
+            IncidentResponse.model_validate(incident)
+            for incident in incidents
+        ]
