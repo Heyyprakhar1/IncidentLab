@@ -1,137 +1,49 @@
-# Architecture
+# IncidentLab Architecture
 
-## Purpose
+This document describes the current architecture of IncidentLab and the engineering principles that guide its evolution.
 
-This document describes the current software architecture of IncidentLab.
+Rather than focusing on implementation details, this document explains the platform's architectural structure, component responsibilities, and design decisions.
 
-It explains how the platform is organized, how responsibilities are separated, and how application components collaborate to deliver business capabilities.
+Current Architecture Version:
 
-Unlike the Product Requirements document, this document focuses on implementation structure and architectural decisions rather than product goals.
-
----
-
-# Architectural Overview
-
-IncidentLab follows a **layered architecture** designed to promote maintainability, modularity, and clear separation of concerns.
-
-Each layer owns a single responsibility and communicates only with the adjacent layer.
-
-The architecture intentionally isolates HTTP handling from business logic and persistence, allowing the platform to evolve without widespread structural changes.
+**v0.5.0 — Error Handling Foundation**
 
 ---
 
-# Architecture Principles
+# Architectural Goals
 
-The platform is built around several architectural principles.
+IncidentLab is designed around the following principles:
 
-## Single Responsibility
+- Layered Architecture
+- Separation of Concerns
+- Single Responsibility
+- Operational Ownership
+- Incremental Evolution
+- Documentation-Driven Development
 
-Every module should own one responsibility.
-
-Examples include:
-
-- API routers own HTTP routing.
-- Services own business use cases.
-- Repositories own database interaction.
-- Models define persisted entities.
-- Schemas define API contracts.
-- Configuration manages application settings.
-
-Responsibilities should not overlap.
+Each engineering milestone strengthens one architectural capability while preserving maintainability and clear component boundaries.
 
 ---
 
-## Separation of Concerns
+# High-Level Architecture
 
-Business rules should remain independent of HTTP handling and database implementation.
-
-Each architectural layer has a clearly defined purpose.
-
----
-
-## Layered Design
-
-Application behavior flows through dedicated layers.
-
-```text
-HTTP Request
-      │
-      ▼
-API Router
-      │
-      ▼
-Application Service
-      │
-      ▼
-Repository
-      │
-      ▼
-SQLAlchemy ORM
-      │
-      ▼
-Database
+```
+                Client
+                   │
+                   ▼
+             API Endpoints
+                   │
+                   ▼
+            Service Layer
+                   │
+                   ▼
+          Repository Layer
+                   │
+                   ▼
+              PostgreSQL
 ```
 
-Each layer performs one responsibility before delegating work to the next layer.
-
----
-
-## Dependency Direction
-
-Dependencies always flow downward.
-
-```text
-API
- │
- ▼
-Services
- │
- ▼
-Repositories
- │
- ▼
-Database
-```
-
-Lower layers never depend on higher layers.
-
-This keeps business logic reusable and minimizes coupling between application components.
-
----
-
-# Application Structure
-
-The current API application is organized as follows.
-
-```text
-app/
-
-├── api/
-│   └── v1/
-│       ├── endpoints/
-│       └── router.py
-│
-├── core/
-│
-├── db/
-│
-├── middleware/
-│
-├── models/
-│
-├── repositories/
-│
-├── schemas/
-│
-├── services/
-│
-├── config.py
-├── lifespan.py
-├── logging_config.py
-└── main.py
-```
-
-Each directory represents a distinct architectural responsibility.
+Every request flows through clearly defined application layers, ensuring business logic remains independent from persistence and HTTP concerns.
 
 ---
 
@@ -139,15 +51,12 @@ Each directory represents a distinct architectural responsibility.
 
 ## API Layer
 
-The API layer receives HTTP requests and returns HTTP responses.
+Responsible for:
 
-Responsibilities include:
-
-- Route registration
+- HTTP routing
 - Request validation
 - Response serialization
-- Dependency injection
-- Delegating work to application services
+- Delegating work to services
 
 The API layer contains no business logic.
 
@@ -155,87 +64,79 @@ The API layer contains no business logic.
 
 ## Service Layer
 
-The service layer represents application use cases.
+Responsible for:
 
-Responsibilities include:
+- Business workflows
+- Validation
+- Application rules
+- Coordinating repositories
 
-- Coordinating business operations
-- Constructing domain entities
-- Calling repositories
-- Returning API response models
-
-The service layer does not perform database queries directly.
+Services are independent of HTTP-specific behavior.
 
 ---
 
 ## Repository Layer
 
-Repositories encapsulate all persistence operations.
+Responsible for:
 
-Responsibilities include:
+- Database interaction
+- Query execution
+- Persistence operations
+- ORM abstraction
 
-- Creating records
-- Retrieving records
-- Updating records
-- Deleting records
-- Managing ORM queries
-
-Repositories isolate SQLAlchemy usage from the rest of the application.
-
----
-
-## Model Layer
-
-Models represent persisted database entities.
-
-Responsibilities include:
-
-- Database table definitions
-- ORM mappings
-- Entity representation
-
-Models do not contain business logic.
-
----
-
-## Schema Layer
-
-Schemas define the public API contract.
-
-Responsibilities include:
-
-- Request validation
-- Response serialization
-- Data transformation
-
-Schemas are independent of database implementation.
+Repositories isolate persistence from business logic.
 
 ---
 
 ## Database Layer
 
-The database layer provides persistence infrastructure.
+Responsible for:
 
-Current responsibilities include:
+- Data storage
+- Entity relationships
+- Transaction persistence
 
-- SQLAlchemy ORM configuration
-- Declarative model registration
-- Database session management
-- Alembic migration support
+SQLAlchemy models represent the database schema while Alembic manages schema evolution.
 
-This layer provides a stable foundation for future persistence requirements.
+---
+
+# Error Handling Architecture
+
+Beginning with **v0.5.0**, IncidentLab adopts centralized exception handling.
+
+Instead of constructing HTTP error responses throughout the application, domain-specific exceptions are propagated to a global exception handler.
+
+```
+Exception Raised
+        │
+        ▼
+Global Exception Handler
+        │
+        ▼
+Standardized Error Response
+```
+
+This approach provides:
+
+- Consistent API responses
+- Centralized error formatting
+- Reduced duplication
+- Better separation of concerns
+- Easier extensibility
+
+Implementation details and rationale are documented in **ADR-003 – Global Exception Handling**.
 
 ---
 
 # Request Lifecycle
 
-A typical request follows the workflow below.
+Normal request flow:
 
-```text
+```
 Client
    │
    ▼
-Router
+API Endpoint
    │
    ▼
 Service
@@ -247,104 +148,141 @@ Repository
 Database
    │
    ▼
-Repository
-   │
-   ▼
-Service
-   │
-   ▼
-Response Schema
-   │
-   ▼
-Client
+Response
 ```
 
-Each layer contributes one clearly defined responsibility.
+Error flow:
+
+```
+Any Layer
+    │
+    ▼
+Application Exception
+    │
+    ▼
+Global Exception Handler
+    │
+    ▼
+Standardized Error Response
+```
+
+This separation keeps business logic focused on application behavior while the exception handler manages HTTP-specific error responses.
 
 ---
 
-# Current Architectural Capabilities
+# Repository Structure
 
-The current implementation provides:
+```
+apps/api/
 
-## Platform Foundation
+├── api/
+├── models/
+├── schemas/
+├── repositories/
+├── services/
+├── exceptions/
+├── middleware/
+├── migrations/
+├── config.py
+├── lifespan.py
+├── logging_config.py
+└── main.py
+```
 
-- FastAPI application bootstrap
-- Typed configuration
-- Lifecycle management
-- Structured logging
-
----
-
-## API Foundation
-
-- Versioned routing
-- Modular router composition
-- Typed request schemas
-- Typed response schemas
-- Service layer architecture
-
----
-
-## Persistence Foundation
-
-- SQLAlchemy ORM
-- Alembic migrations
-- Repository pattern
-- Database session management
-- Persistent Incident entities
+Each package owns a single responsibility and communicates through well-defined interfaces.
 
 ---
 
-# Architectural Benefits
+# Component Responsibilities
 
-The current architecture provides several engineering advantages.
-
-## Maintainability
-
-Components remain small, focused, and independently understandable.
-
----
-
-## Testability
-
-Business logic can be tested independently from HTTP routing and persistence.
-
----
-
-## Extensibility
-
-New capabilities can be introduced by extending existing layers rather than restructuring the application.
+| Component | Responsibility |
+|-----------|----------------|
+| `api/` | HTTP endpoints and routing |
+| `services/` | Business logic |
+| `repositories/` | Database access |
+| `models/` | Database entities |
+| `schemas/` | Request and response contracts |
+| `exceptions/` | Exception hierarchy and handlers |
+| `middleware/` | Cross-cutting concerns |
+| `config.py` | Configuration management |
+| `lifespan.py` | Application lifecycle |
+| `logging_config.py` | Logging configuration |
 
 ---
 
-## Consistency
+# Engineering Foundations
 
-Every feature follows the same architectural workflow from request to persistence.
+The platform currently consists of the following completed foundations:
+
+- ✅ Repository Foundation
+- ✅ Application Foundation
+- ✅ Platform Operations Foundation
+- ✅ API Foundation
+- ✅ Persistence Foundation
+- ✅ Error Handling Foundation
+
+Each foundation represents a stable architectural milestone.
 
 ---
 
-# Future Evolution
+# Design Principles
 
-Future milestones are expected to build upon the current layered architecture.
+## Layered Architecture
 
-Planned additions include:
+Each layer owns a single responsibility and communicates only with adjacent layers.
 
-- Global exception handling
-- Authentication
-- Authorization
+---
+
+## Separation of Concerns
+
+Business logic, persistence, configuration, logging, and error handling remain independent to improve maintainability.
+
+---
+
+## Single Responsibility
+
+Every package and module exists for one clearly defined purpose.
+
+---
+
+## Incremental Evolution
+
+Architectural capabilities are introduced through small, stable milestones rather than large redesigns.
+
+---
+
+# Future Architecture
+
+Future engineering milestones will extend the platform with:
+
+- Dependency injection
+- Authentication and authorization
 - Incident lifecycle management
-- Audit logging
-- Background processing
+- Root Cause Analysis (RCA)
+- Runbooks
+- Audit history
+- Metrics and observability
+- Distributed tracing
+- Kubernetes integrations
 - Event-driven workflows
-- Observability enhancements
+- Automated remediation
 
-These capabilities will integrate into the existing architecture without changing the established layer boundaries.
+These capabilities will build upon the existing architectural foundations without changing the core layered design.
+
+---
+
+# Related Documentation
+
+- `README.md`
+- `docs/product-requirements.md`
+- `docs/roadmap.md`
+- `docs/changelog.md`
+- `docs/adr/`
 
 ---
 
 # Summary
 
-IncidentLab currently follows a modular layered architecture that separates HTTP handling, business logic, persistence, and database concerns into dedicated components.
+IncidentLab follows a production-inspired layered architecture where each engineering milestone introduces one architectural capability while preserving maintainability, operational ownership, and documentation quality.
 
-This architecture provides a stable foundation for incremental platform evolution while preserving maintainability, operational clarity, and long-term scalability.
+The architecture is intentionally designed to evolve incrementally, ensuring that future capabilities can be introduced without compromising the stability or clarity of the existing platform.

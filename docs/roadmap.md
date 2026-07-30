@@ -1,286 +1,188 @@
-# Engineering Roadmap
+# IncidentLab Roadmap
 
-## Overview
+IncidentLab evolves through incremental engineering milestones.
 
-This roadmap describes the planned evolution of IncidentLab.
-
-Rather than tracking individual tasks, it tracks the introduction of architectural capabilities that expand the platform while preserving maintainability, operational quality, and clear ownership.
-
-Each milestone represents a stable engineering release.
-
-The roadmap is intentionally iterative. Every release builds upon the previous one instead of introducing large, disruptive architectural changes.
+Rather than delivering many unrelated features, each release introduces one architectural capability while preserving maintainability, operational ownership, and engineering quality.
 
 ---
 
-# Current Status
+# Roadmap Philosophy
 
-| Item | Status |
-|------|--------|
-| Current Version | **v0.4.0** |
-| Current Phase | Persistence Foundation |
-| Architecture | Modular Layered Architecture |
-| Development Model | Sprint-based Incremental Evolution |
+Every milestone should:
+
+- Solve one architectural problem.
+- Improve platform maturity.
+- Preserve existing stability.
+- Extend the platform without major redesign.
+- Be fully documented before release.
 
 ---
 
 # Completed Milestones
 
-## v0.1.0 — Repository Foundation ✅
+## v0.1.0 — Repository Foundation
 
-### Objective
+Completed:
 
-Establish the project foundation and engineering documentation.
-
-### Delivered
-
-- Repository structure
-- Initial project documentation
-- Engineering vision
-- Product direction
-- Initial roadmap
-
-### Outcome
-
-The project gained a documented foundation that defines its long-term purpose and development philosophy.
-
----
-
-## v0.2.0 — Platform Operations Foundation ✅
-
-### Objective
-
-Create a production-ready FastAPI application foundation.
-
-### Delivered
-
-#### Platform
-
-- FastAPI application bootstrap
-- Typed configuration
-- Environment management
-- Lifespan management
-
-#### Observability
-
-- Structured logging
-- Startup logging
-- Shutdown logging
-- HTTP request logging middleware
-
-### Outcome
-
-IncidentLab became an operational application rather than a project skeleton.
-
----
-
-## v0.3.0 — API Foundation ✅
-
-### Objective
-
-Establish a scalable API architecture suitable for future platform capabilities.
-
-### Delivered
-
-#### API
-
-- Versioned routing
-- Router composition
+- Repository initialization
+- Project structure
+- FastAPI bootstrap
+- Environment configuration
 - Health endpoint
+- Initial engineering documentation
 
-#### Architecture
+---
 
-- Service layer
+## v0.2.0 — Platform Operations Foundation
+
+Completed:
+
+- Centralized logging
+- HTTP request logging middleware
+- Startup and shutdown lifecycle logging
+- Configurable log levels
+
+---
+
+## v0.3.0 — API Foundation
+
+Completed:
+
+- Versioned API routing
+- Modular router composition
 - Typed request and response schemas
+- Service layer architecture
 - Separation of HTTP and business logic
 
-### Outcome
-
-The API adopted a layered architecture capable of supporting future business capabilities without structural refactoring.
-
 ---
 
-## v0.4.0 — Persistence Foundation ✅
+## v0.4.0 — Persistence Foundation
 
-### Objective
+Completed:
 
-Introduce persistent storage while preserving clear architectural boundaries.
-
-### Delivered
-
-#### Persistence
-
-- SQLAlchemy ORM
-- Declarative models
-- Async database sessions
-- Alembic migrations
+- SQLAlchemy ORM integration
 - Repository layer
-
-#### Business Workflows
-
-- Incident creation
-- Incident listing
-
-### Outcome
-
-IncidentLab evolved from a stateless API into a persistence-backed backend application with its first complete business workflow.
+- Alembic migrations
+- Database session management
+- Incident creation workflow
+- Incident listing workflow
 
 ---
 
-# Current Development Focus
+## v0.5.0 — Error Handling Foundation
 
-The platform is currently focused on expanding incident management capabilities on top of the established persistence foundation.
+Completed:
 
-Priority areas include:
-
-- Incident update operations
-- Incident deletion
-- Status transitions
-- Validation improvements
-- Standardized error handling
+- Global exception handling framework
+- Centralized exception registration
+- Custom application exception hierarchy
+- Standardized API error responses
+- Production-oriented failure handling
 
 ---
 
 # Upcoming Milestones
 
-## v0.5.0 — Application Foundation
+## Dependency & Configuration Foundation
 
-### Planned Capabilities
-
-#### Error Handling
-
-- Global exception handlers
-- Standard error response models
-- Custom application exceptions
-
-#### Dependencies
+Planned:
 
 - Shared dependency providers
 - Dependency injection
-- Request-scoped resources
-
-### Goal
-
-Provide a consistent execution model for every API endpoint.
+- Common application dependencies
+- Configuration improvements
 
 ---
 
-## v0.6.0 — Authentication & Authorization
+## Authentication & Authorization
 
-### Planned Capabilities
+Planned:
 
-- JWT authentication
-- User identity
-- Authorization
+- User authentication
+- JWT-based authorization
 - Role-based access control
-
-### Goal
-
-Secure platform resources using production-inspired authentication patterns.
+- Protected API endpoints
 
 ---
 
-## v0.7.0 — Incident Management
+## Incident Operations
 
-### Planned Capabilities
+Planned:
 
-- Incident updates
-- Incident deletion
-- Incident lifecycle
-- Incident status management
+- Incident lifecycle management
+- Status transitions
 - Timeline events
-
-### Goal
-
-Expand the initial incident workflow into a complete incident management system.
-
----
-
-## v0.8.0 — Operational Intelligence
-
-### Planned Capabilities
-
 - Root Cause Analysis (RCA)
 - Runbooks
-- Audit logs
-- Incident history
-- Operational insights
-
-### Goal
-
-Expand IncidentLab beyond incident tracking into operational ownership.
+- Audit history
 
 ---
 
-# Future Platform Evolution
+## Observability Foundation
 
-As the platform matures, future releases may introduce:
-
-## Observability
+Planned:
 
 - Metrics
-- Distributed tracing
+- Prometheus integration
+- Grafana dashboards
+- Structured logging improvements
 - Health monitoring
-- Performance dashboards
 
-## Platform Integrations
+---
 
-- AWS
-- Kubernetes
-- Terraform
-- External APIs
+## Cloud-Native Platform
+
+Planned:
+
+- Kubernetes deployment
+- Container orchestration
+- Infrastructure as Code
+- Terraform automation
+- Cloud integrations
+
+---
+
+## Platform Intelligence
+
+Long-term vision:
+
 - Event-driven workflows
-
-## Automation
-
-- Background workers
-- Scheduled jobs
-- Notifications
-- Event processing
-
-Each capability will be introduced only when supported by the existing architecture.
+- Automated remediation
+- Intelligent incident analysis
+- AI-assisted operational insights
+- Predictive reliability engineering
 
 ---
 
-# Roadmap Principles
+# Release Strategy
 
-The roadmap follows several engineering principles.
+Each milestone follows the same engineering lifecycle.
 
-## Architecture Before Features
+```
+Engineering Work
+        │
+        ▼
+    feature/*
+        │
+        ▼
+Code Review & Validation
+        │
+        ▼
+       main
+        │
+        ▼
+Documentation Update
+        │
+        ▼
+   Release Tag
+```
 
-New architectural foundations are established before higher-level platform capabilities.
-
----
-
-## Incremental Delivery
-
-Each milestone delivers a complete, stable improvement rather than partially implemented functionality.
-
----
-
-## Stable Releases
-
-Every version represents a deployable and maintainable platform state.
-
----
-
-## Deliberate Evolution
-
-Technology is introduced only when it solves an existing architectural or operational problem.
-
-Complexity is earned—not assumed.
+Only stable, documented, and validated capabilities become part of an official release.
 
 ---
 
-# Success Criteria
+# Long-Term Vision
 
-The roadmap will be considered successful if every release:
+The long-term objective is to evolve IncidentLab into a production-inspired Operations Ownership Platform capable of supporting the complete incident lifecycle—from detection and investigation to resolution, automation, and continuous operational improvement.
 
-- Improves the platform architecture.
-- Preserves modularity.
-- Maintains operational quality.
-- Keeps documentation synchronized with implementation.
-- Enables future capabilities with minimal refactoring.
-
-The objective is not rapid feature delivery.
-
-The objective is sustainable engineering progress.
+Every milestone should strengthen the platform while preserving simplicity, maintainability, and architectural consistency.

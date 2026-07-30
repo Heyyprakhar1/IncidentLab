@@ -1,336 +1,151 @@
 # IncidentLab
 
-> **An Operations Ownership Platform for designing, operating, investigating, and continuously improving cloud-native systems.**
+> **A production-inspired Operations Ownership Platform for designing, operating, investigating, and continuously improving cloud-native systems.**
 
-IncidentLab is a production-inspired engineering platform focused on building the systems, workflows, and operational capabilities required to understand and manage modern cloud-native environments.
+IncidentLab is a cloud-native engineering platform built incrementally through production-oriented engineering milestones. Instead of demonstrating isolated technologies, the project focuses on building the operational capabilities, architectural foundations, and engineering practices required to manage modern distributed systems.
 
-Rather than demonstrating isolated technologies, IncidentLab is developed through incremental engineering milestones where each release introduces one architectural capability while maintaining maintainability, operational visibility, and clear ownership boundaries.
-
-The goal is to build a platform the way real engineering teams evolve systems — through deliberate design, controlled changes, and continuous improvement.
+Every release introduces one architectural capability while preserving maintainability, operational ownership, and engineering discipline.
 
 ---
 
 # Why IncidentLab Exists
 
-Modern cloud platforms can provision infrastructure within minutes.
+Provisioning cloud infrastructure is easy.
 
-Operating those systems reliably is significantly harder.
+Operating production systems reliably is not.
 
-Production environments require more than deployment automation:
-
-* Operational visibility
-* Reliable APIs
-* Incident lifecycle management
-* Root cause investigation
-* Clear architecture boundaries
-* Standardized engineering practices
-* Continuous improvement workflows
-
-IncidentLab exists to explore these operational challenges by building a realistic platform instead of isolated technical demonstrations.
+IncidentLab exists to explore real operational challenges by building a maintainable platform that evolves the same way production software does—through deliberate architectural improvements, documented engineering decisions, and incremental releases.
 
 ---
 
 # Project Goals
 
-IncidentLab is designed around the following long-term goals:
-
-* Build a maintainable cloud-native platform.
-* Practice production-oriented backend architecture.
-* Promote operational ownership.
-* Model real incident management workflows.
-* Document engineering decisions alongside implementation.
-* Demonstrate incremental platform evolution.
+- Build a maintainable cloud-native platform.
+- Practice production-oriented backend architecture.
+- Model real incident management workflows.
+- Promote operational ownership.
+- Document engineering decisions alongside implementation.
 
 ---
 
-# Engineering Principles
+# Current Release
 
-## Single Responsibility
+## v0.5.0 — Error Handling Foundation
 
-Every component should have one clear responsibility.
+The platform currently includes the following engineering foundations.
 
-Examples:
+### Application Foundation
 
-* `config.py` → application configuration
-* `logging_config.py` → logging setup
-* `lifespan.py` → application lifecycle
-* `models/` → database entities
-* `schemas/` → API contracts
-* `repositories/` → persistence operations
-* `services/` → business workflows
-* `api/` → HTTP interfaces
+- FastAPI application bootstrap
+- Typed configuration management
+- Environment-based settings
+- Application lifecycle management
+- Health endpoint
 
-Responsibilities should remain isolated.
+### Platform Operations Foundation
+
+- Centralized logging
+- HTTP request logging middleware
+- Startup and shutdown lifecycle logging
+- Configurable log levels
+
+### API Foundation
+
+- Versioned API routing
+- Modular router composition
+- Typed request and response schemas
+- Service layer architecture
+- Separation of HTTP and business logic
+
+### Persistence Foundation
+
+- SQLAlchemy ORM
+- Alembic migrations
+- Repository layer
+- Database session integration
+- Incident creation workflow
+- Incident listing workflow
+
+### Error Handling Foundation
+
+- Global exception handling framework
+- Centralized exception registration
+- Custom application exception hierarchy
+- Resource-specific exceptions (`IncidentNotFoundException`)
+- Standardized API error response model
+- Structured error details
+- Consistent HTTP status handling
+- Production-oriented API failure handling
 
 ---
 
-## Separation of Concerns
-
-IncidentLab follows a layered application architecture.
+# High-Level Architecture
 
 ```
-HTTP Request
+                Client
+                   │
+                   ▼
+             API Endpoints
+                   │
+                   ▼
+            Service Layer
+                   │
+                   ▼
+          Repository Layer
+                   │
+                   ▼
+              PostgreSQL
 
-      │
+────────────────────────────────────
 
-      ▼
+Exceptions from any layer
 
-API Router
-
-      │
-
-      ▼
-
-Service Layer
-
-      │
-
-      ▼
-
-Repository Layer
-
-      │
-
-      ▼
-
-Database Models
-
-      │
-
-      ▼
-
-Database
+                   │
+                   ▼
+      Global Exception Handler
+                   │
+                   ▼
+     Standardized Error Response
 ```
 
-Each layer owns a specific responsibility and communicates only through defined boundaries.
+IncidentLab follows a layered architecture where HTTP handling, business logic, persistence, and error handling remain isolated behind clearly defined responsibilities.
 
 ---
 
-## Incremental Architecture
-
-Large platforms are not created in a single implementation cycle.
-
-IncidentLab evolves through focused engineering milestones.
-
-Each milestone introduces one architectural capability while preserving existing stability.
-
----
-
-## Documentation as Source of Truth
-
-The `main` branch represents the official state of the platform.
-
-Development workflow:
-
-```
-feature/*
-      │
-      ▼
-develop
-      │
-      ▼
-Validation
-      │
-      ▼
-main
-      │
-      ▼
-Documentation Update
-      │
-      ▼
-Release Tag
-```
-
-Feature branches contain implementation work.
-
-Documentation is updated only after changes become part of the stable platform.
-
----
-
-# Current Architecture
-
-Current repository structure:
+# Repository Structure
 
 ```
 IncidentLab/
 
 ├── apps/
 │   └── api/
-│       │
-│       ├── app/
-│       │   │
-│       │   ├── api/
-│       │   │   └── v1/
-│       │   │       ├── endpoints/
-│       │   │       └── router.py
-│       │   │
-│       │   ├── models/
-│       │   │
-│       │   ├── schemas/
-│       │   │
-│       │   ├── repositories/
-│       │   │
-│       │   ├── services/
-│       │   │
-│       │   ├── middleware/
-│       │   │
-│       │   ├── config.py
-│       │   ├── lifespan.py
-│       │   ├── logging_config.py
-│       │   └── main.py
-│       │
-│       ├── migrations/
-│       └── README.md
+│       ├── api/
+│       ├── models/
+│       ├── schemas/
+│       ├── repositories/
+│       ├── services/
+│       ├── exceptions/
+│       ├── middleware/
+│       └── main.py
 │
+├── migrations/
 └── docs/
 ```
 
 ---
 
-# Current Release
+# Technology Stack
 
-## v0.3.0 — API Foundation
-
-Current platform capabilities include:
-
----
-
-## Application Foundation
-
-Implemented:
-
-* FastAPI application bootstrap
-* Typed configuration management
-* Environment-based settings
-* Application lifecycle management
-* Health endpoint
-
----
-
-## Platform Operations Foundation
-
-Implemented:
-
-* Centralized logging
-* Startup lifecycle logs
-* Shutdown lifecycle logs
-* HTTP request logging middleware
-* Configurable log levels
-
----
-
-## API Foundation
-
-Implemented:
-
-* Versioned API routing
-* Modular router composition
-* Typed request schemas
-* Typed response schemas
-* Service layer architecture
-* Separation of HTTP and business logic
-
----
-
-## Persistence Foundation
-
-Implemented:
-
-* SQLAlchemy ORM foundation
-* Database models
-* Alembic migrations
-* Repository layer
-* Database session integration
-* Incident creation workflow
-* Incident listing workflow
-
----
-
-# Incident Workflow
-
-Current incident flow:
-
-```
-Client Request
-
-      │
-
-      ▼
-
-API Endpoint
-
-      │
-
-      ▼
-
-Incident Service
-
-      │
-
-      ▼
-
-Incident Repository
-
-      │
-
-      ▼
-
-SQLAlchemy Model
-
-      │
-
-      ▼
-
-Database
-```
-
-This structure keeps business workflows independent from database operations and HTTP handling.
-
----
-
-# Development Workflow
-
-## Branch Responsibilities
-
-### feature/*
-
-Used for:
-
-* Feature implementation
-* Architectural changes
-* Engineering experiments
-
----
-
-### develop
-
-Used for:
-
-* Integration
-* Validation
-* Pre-release testing
-
----
-
-### main
-
-Used for:
-
-* Stable implementation
-* Official documentation
-* Release milestones
-
----
-
-# Sprint Progress
-
-| Sprint                         | Status     |
-| ------------------------------ | ---------- |
-| Repository Foundation          | ✅ Complete |
-| Application Bootstrap          | ✅ Complete |
-| Platform Operations Foundation | ✅ Complete |
-| API Foundation                 | ✅ Complete |
-| Database Foundation            | ✅ Complete |
+- Python 3.13
+- FastAPI
+- Pydantic Settings
+- SQLAlchemy
+- Alembic
+- PostgreSQL
+- Uvicorn
+- uv
+- Git
+- GitHub
 
 ---
 
@@ -338,150 +153,78 @@ Used for:
 
 Upcoming engineering milestones:
 
-## Application Reliability Foundation
-
-Planned:
-
-* Global exception handling
-* Standard error responses
-* Custom application exceptions
-* Improved API failure handling
-
----
-
-## Dependency & Configuration Foundation
-
-Planned:
-
-* Shared dependency providers
-* Dependency injection improvements
-* Common application dependencies
-
----
-
-## Authentication & Authorization
-
-Planned:
-
-* User identity
-* JWT authentication
-* Role-based access control
-
----
-
-## Incident Operations
-
-Planned:
-
-* Incident lifecycle management
-* Status transitions
-* Timeline events
-* RCA workflows
-* Runbooks
-* Audit history
-
----
-
-## Platform Intelligence
-
-Future capabilities:
-
-* Metrics
-* Distributed tracing
-* Cloud integrations
-* Kubernetes workflows
-* Terraform automation
-* Event-driven architecture
-* Automated remediation
-
----
-
-# Technology Stack
-
-Current technologies:
-
-* Python 3.13
-* FastAPI
-* Pydantic Settings
-* SQLAlchemy
-* Alembic
-* PostgreSQL
-* Uvicorn
-* uv
-* Git
-* GitHub
-
-Future technologies will be introduced only when required by the architecture.
+- Dependency & Configuration Foundation
+- Authentication & Authorization
+- Incident Lifecycle Management
+- Root Cause Analysis (RCA)
+- Runbooks & Audit History
+- Metrics & Observability
+- Distributed Tracing
+- Kubernetes Integrations
+- Terraform Automation
+- Event-Driven Workflows
+- Automated Remediation
 
 ---
 
 # Documentation
 
-Engineering documentation:
+Detailed engineering documentation is maintained under the `docs/` directory.
 
-| Document                       | Purpose                        |
-| ------------------------------ | ------------------------------ |
-| `docs/vision.md`               | Long-term platform vision      |
+| Document | Purpose |
+|----------|---------|
+| `docs/vision.md` | Long-term platform vision |
 | `docs/product-requirements.md` | Product scope and requirements |
-| `docs/architecture.md`         | System architecture            |
-| `docs/roadmap.md`              | Engineering roadmap            |
-| `docs/release-history.md`      | Release evolution              |
-| `docs/adr/`                    | Architectural decisions        |
+| `docs/architecture.md` | System architecture |
+| `docs/roadmap.md` | Engineering roadmap |
+| `docs/changelog.md` | Release history |
+| `docs/adr/` | Architectural Decision Records |
 
 ---
 
-# Release Strategy
+# Development Workflow
 
-Every release follows:
+Every release follows a controlled engineering workflow:
 
 ```
 Engineering Work
-
-      │
-
-      ▼
-
-Feature Branch
-
-      │
-
-      ▼
-
-Integration
-
-      │
-
-      ▼
-
-Main Branch
-
-      │
-
-      ▼
-
+        │
+        ▼
+    feature/*
+        │
+        ▼
+Code Review & Validation
+        │
+        ▼
+       main
+        │
+        ▼
 Documentation Update
-
-      │
-
-      ▼
-
-Release Tag
+        │
+        ▼
+   Release Tag
 ```
 
-Each release represents a stable combination of:
+Documentation is updated only after implementation becomes part of the stable `main` branch.
 
-* Source code
-* Architecture
-* Documentation
-* Engineering decisions
+---
+
+# Release History
+
+| Version | Milestone |
+|----------|-----------|
+| v0.1.0 | Repository Foundation |
+| v0.2.0 | Platform Operations Foundation |
+| v0.3.0 | API Foundation |
+| v0.4.0 | Persistence Foundation |
+| v0.5.0 | Error Handling Foundation |
 
 ---
 
 # Repository Status
 
-IncidentLab is actively evolving as a production-inspired cloud platform.
+IncidentLab is an actively evolving production-inspired cloud-native platform.
 
-The objective is not rapid feature accumulation.
+Rather than prioritizing rapid feature delivery, the project focuses on incremental engineering milestones that improve architectural maturity, operational ownership, and long-term maintainability.
 
-The objective is building a maintainable system where every architectural decision improves operational maturity and engineering quality.
-
+Every release represents a stable combination of source code, documentation, architecture, and engineering decisions.

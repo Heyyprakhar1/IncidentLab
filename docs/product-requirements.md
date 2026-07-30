@@ -1,94 +1,54 @@
-# Product Requirements
+# Product Requirements Document (PRD)
 
-## Purpose
+**Project:** IncidentLab
 
-This document defines the functional scope, product objectives, and engineering requirements for IncidentLab.
-
-It serves as the reference point for understanding what the platform is intended to build, who it is designed for, and how its capabilities are expected to evolve over time.
-
-Unlike the Architecture document, this document focuses on **product capabilities and engineering requirements** rather than implementation details.
+**Current Release:** v0.5.0 – Error Handling Foundation
 
 ---
 
-# Product Overview
+# Purpose
 
-IncidentLab is an Operations Ownership Platform that explores how modern cloud-native systems are designed, operated, observed, and continuously improved.
+IncidentLab is a production-inspired incident management platform designed to help engineering teams manage operational incidents through a structured, maintainable, and extensible workflow.
 
-The platform is being developed incrementally through engineering sprints, with each milestone introducing a focused capability while maintaining architectural consistency and operational quality.
-
-Rather than serving as a traditional CRUD application, IncidentLab is intended to model the operational concerns encountered throughout the lifecycle of production systems.
+The project is built incrementally, with each release introducing one architectural capability while preserving engineering quality and long-term maintainability.
 
 ---
 
-# Product Objectives
+# Vision
 
-The primary objectives of IncidentLab are to:
-
-- Build a maintainable cloud-native platform.
-- Promote operational ownership over infrastructure provisioning.
-- Provide a realistic foundation for incident investigation workflows.
-- Encourage production-inspired engineering practices.
-- Maintain a modular and evolvable software architecture.
-- Document architectural decisions alongside implementation.
+To provide a modern platform that supports the complete incident lifecycle—from incident creation and investigation to resolution, automation, and operational insights.
 
 ---
 
-# Target Users
+# Objectives
 
-IncidentLab is intended for engineers who are interested in designing and operating modern distributed systems.
+The platform aims to:
 
-Primary users include:
-
-- Platform Engineers
-- DevOps Engineers
-- Site Reliability Engineers (SREs)
-- Cloud Engineers
-- Backend Engineers
-- Engineering teams responsible for operational excellence
+- Centralize incident management.
+- Provide consistent and reliable APIs.
+- Maintain a modular and scalable architecture.
+- Encourage operational best practices.
+- Serve as a learning platform for modern backend and platform engineering.
 
 ---
 
-# Product Capabilities
+# Current Scope
 
-The platform will evolve through multiple engineering milestones.
+As of **v0.5.0**, IncidentLab provides the foundational capabilities required for future platform growth.
 
-## Current Capabilities
-
-The current release provides the foundational capabilities required to support future platform development.
-
-### Platform Foundation
+Implemented capabilities include:
 
 - FastAPI application bootstrap
-- Typed application configuration
-- Environment-based settings management
-- Lifecycle management
-- Centralized logging
-
-### Observability
-
-- HTTP request logging middleware
-- Startup logging
-- Shutdown logging
-- Configurable log levels
-
-### API Foundation
-
-- Versioned API routing
-- Modular router composition
-- Health endpoint
-- Typed request schemas
-- Typed response schemas
-- Service layer architecture
-
-### Persistence Foundation
-
-- SQLAlchemy ORM integration
-- Alembic database migrations
+- Versioned REST APIs
+- Layered architecture
 - Repository pattern
-- Database session management
-- Persistent Incident entities
+- SQLAlchemy persistence
+- Alembic migrations
+- Centralized logging
 - Incident creation
-- Incident listing
+- Incident retrieval
+- Global exception handling
+- Standardized API error responses
 
 ---
 
@@ -96,189 +56,110 @@ The current release provides the foundational capabilities required to support f
 
 The platform shall:
 
-- Expose versioned REST APIs.
-- Validate incoming API requests.
-- Return standardized API responses.
-- Maintain a dedicated service layer for business logic.
-- Persist application data using a relational database.
-- Encapsulate database access through repositories.
-- Support schema evolution through database migrations.
-- Centralize application configuration.
-- Record operational request logs.
-- Maintain modular application boundaries.
-- Support incremental feature expansion without major architectural changes.
+- Expose RESTful APIs for incident operations.
+- Validate incoming requests.
+- Persist incident data in PostgreSQL.
+- Return structured responses.
+- Return standardized error responses.
+- Separate business logic from HTTP concerns.
+- Support future expansion without major architectural changes.
 
 ---
 
 # Non-Functional Requirements
 
-The platform should satisfy the following engineering qualities.
+The platform shall prioritize:
 
-## Maintainability
-
-Components should remain modular, readable, and independently testable.
-
----
-
-## Scalability
-
-The architecture should support future services without requiring structural redesign.
+- Maintainability
+- Scalability
+- Readability
+- Extensibility
+- Reliability
+- Consistent API behavior
+- Documentation-driven development
 
 ---
 
-## Observability
+# Out of Scope (Current Release)
 
-Operational behavior should be visible through structured application logging.
+The following capabilities are intentionally excluded from v0.5.0:
 
----
-
-## Consistency
-
-Application responses should follow typed contracts wherever possible.
-
----
-
-## Extensibility
-
-New platform capabilities should integrate naturally into the existing architecture.
-
----
-
-## Documentation
-
-Engineering documentation should evolve alongside implementation and accurately represent the current platform state.
-
----
-
-# Current Scope
-
-The current implementation includes:
-
-- Application initialization
-- Configuration management
-- Lifecycle management
-- Structured logging
-- Request middleware
-- Versioned API routing
-- Health endpoint
-- Typed request schemas
-- Typed response schemas
-- Service layer
-- Repository layer
-- SQLAlchemy ORM
-- Alembic migrations
-- Database session management
-- Incident persistence
-- Incident creation
-- Incident listing
-
----
-
-# Planned Scope
-
-Future engineering milestones will introduce additional platform capabilities.
-
-## Error Handling
-
-- Global exception handlers
-- Standard error responses
-- Custom application exceptions
-
----
-
-## Dependency Management
-
-- Shared dependency providers
-- Dependency injection
-- Request-scoped services
-
----
-
-## Incident Operations
-
-- Incident updates
-- Incident deletion
-- Incident lifecycle management
-- Incident status transitions
-
----
-
-## Authentication
-
-- JWT authentication
-- Authorization
-- Role-based access control
-
----
-
-## Operational Intelligence
-
-- Root Cause Analysis (RCA)
-- Operational runbooks
-- Audit logging
-- Incident history
-
----
-
-## Platform Integrations
-
-- AWS
-- Kubernetes
-- Terraform
-- External APIs
-- Event-driven workflows
-
----
-
-## Observability
-
-- Metrics
-- Distributed tracing
-- Health monitoring
-- Performance dashboards
-
----
-
-# Out of Scope
-
-The current platform intentionally does not include:
-
-- User management
 - Authentication
-- Background workers
-- Event queues
-- Distributed services
-- Multi-tenancy
-- Real-time communication
-- Production deployment infrastructure
+- Authorization
+- User management
+- Notifications
+- File attachments
+- Metrics
+- Dashboards
+- Kubernetes deployment
+- AI-assisted workflows
+- Automated remediation
 
-These capabilities will be introduced only when supported by future architectural milestones.
+These features are planned for future milestones.
+
+---
+
+# Target Users
+
+IncidentLab is intended for:
+
+- Backend engineers
+- Platform engineers
+- DevOps engineers
+- Site Reliability Engineers (SREs)
+- Students learning production-grade backend architecture
 
 ---
 
 # Success Criteria
 
-IncidentLab will be considered successful when it demonstrates:
+The project is considered successful when it:
 
-- Clear architectural boundaries.
-- Production-oriented engineering practices.
-- Incremental platform evolution.
-- Maintainable code organization.
-- Consistent API design.
-- Reliable data persistence.
-- Strong operational visibility.
-- High-quality engineering documentation.
-
-Success is measured by architectural quality and operational maturity rather than feature count alone.
+- Provides a stable and well-documented foundation.
+- Demonstrates clean architectural separation.
+- Supports incremental feature delivery.
+- Maintains consistent API behavior.
+- Can evolve without significant redesign.
 
 ---
 
-# Product Evolution
+# Release Alignment
 
-IncidentLab is intentionally developed through iterative engineering sprints.
+Current release:
 
-Each sprint introduces one architectural capability while preserving the stability of existing components.
+**v0.5.0 – Error Handling Foundation**
 
-This incremental approach allows the platform to grow predictably, reduces unnecessary complexity, and ensures that engineering decisions remain deliberate as the system evolves.
+This release establishes a standardized error handling strategy, improving API consistency and preparing the platform for future capabilities such as authentication, validation, observability, and advanced incident workflows.
 
-The product requirements defined in this document will continue to evolve alongside the platform while remaining aligned with its long-term vision.
+---
+
+# Future Direction
+
+Future releases will focus on:
+
+- Dependency injection
+- Authentication and authorization
+- Incident lifecycle management
+- Root Cause Analysis (RCA)
+- Runbooks
+- Audit history
+- Metrics and observability
+- Cloud-native deployment
+- Event-driven workflows
+- Intelligent operational insights
+
+---
+
+# Related Documentation
+
+- `README.md`
+- `docs/architecture.md`
+- `docs/roadmap.md`
+- `docs/changelog.md`
+- `docs/adr/`
+
+---
+
+# Summary
+
+IncidentLab is evolving through milestone-based releases into a production-inspired incident management platform. The current release establishes the architectural foundations required for future capabilities while maintaining a clean, modular, and well-documented codebase.
