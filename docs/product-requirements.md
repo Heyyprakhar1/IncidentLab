@@ -1,54 +1,44 @@
 # Product Requirements Document (PRD)
 
-**Project:** IncidentLab
+# Project
 
-**Current Release:** v0.5.0 – Error Handling Foundation
-
----
-
-# Purpose
-
-IncidentLab is a production-inspired incident management platform designed to help engineering teams manage operational incidents through a structured, maintainable, and extensible workflow.
-
-The project is built incrementally, with each release introducing one architectural capability while preserving engineering quality and long-term maintainability.
+IncidentLab
 
 ---
 
 # Vision
 
-To provide a modern platform that supports the complete incident lifecycle—from incident creation and investigation to resolution, automation, and operational insights.
+IncidentLab is a production-inspired backend platform designed to demonstrate how modern backend systems evolve through incremental architectural milestones.
+
+Rather than focusing solely on application features, the project emphasizes engineering practices, maintainability, and clean architecture.
 
 ---
 
 # Objectives
 
-The platform aims to:
+The project aims to:
 
-- Centralize incident management.
-- Provide consistent and reliable APIs.
-- Maintain a modular and scalable architecture.
-- Encourage operational best practices.
-- Serve as a learning platform for modern backend and platform engineering.
+- Build a maintainable backend architecture.
+- Demonstrate production-oriented engineering practices.
+- Document architectural decisions through ADRs.
+- Introduce one foundational capability per release.
+- Preserve backward compatibility across architectural evolution.
 
 ---
 
 # Current Scope
 
-As of **v0.5.0**, IncidentLab provides the foundational capabilities required for future platform growth.
+As of **v0.6.0 – Dependency Injection Foundation**, IncidentLab provides:
 
-Implemented capabilities include:
-
-- FastAPI application bootstrap
-- Versioned REST APIs
-- Layered architecture
+- RESTful API endpoints
+- SQLAlchemy Async persistence
+- PostgreSQL integration
 - Repository pattern
-- SQLAlchemy persistence
-- Alembic migrations
-- Centralized logging
-- Incident creation
-- Incident retrieval
 - Global exception handling
-- Standardized API error responses
+- Standardized error responses
+- Dependency Injection through FastAPI
+- Layered architecture
+- Centralized dependency management
 
 ---
 
@@ -56,110 +46,66 @@ Implemented capabilities include:
 
 The platform shall:
 
-- Expose RESTful APIs for incident operations.
-- Validate incoming requests.
-- Persist incident data in PostgreSQL.
-- Return structured responses.
-- Return standardized error responses.
-- Separate business logic from HTTP concerns.
-- Support future expansion without major architectural changes.
+- Create incidents.
+- List incidents.
+- Retrieve incidents by identifier.
+- Persist incident data.
+- Return standardized API responses.
+- Handle application exceptions consistently.
+- Resolve application services through dependency providers.
 
 ---
 
 # Non-Functional Requirements
 
-The platform shall prioritize:
+The platform shall:
 
-- Maintainability
-- Scalability
-- Readability
-- Extensibility
-- Reliability
-- Consistent API behavior
-- Documentation-driven development
+- Follow layered architecture.
+- Minimize coupling between components.
+- Centralize dependency management.
+- Support future scalability.
+- Remain easy to test.
+- Encourage separation of concerns.
+- Maintain production-inspired project organization.
 
 ---
 
-# Out of Scope (Current Release)
+# Architectural Foundations
 
-The following capabilities are intentionally excluded from v0.5.0:
+Completed:
+
+- Repository Foundation
+- Platform Operations Foundation
+- API Foundation
+- Persistence Foundation
+- Error Handling Foundation
+- Dependency Injection Foundation
+
+---
+
+# Future Capabilities
+
+Planned future milestones include:
 
 - Authentication
 - Authorization
-- User management
-- Notifications
-- File attachments
-- Metrics
-- Dashboards
-- Kubernetes deployment
-- AI-assisted workflows
-- Automated remediation
-
-These features are planned for future milestones.
-
----
-
-# Target Users
-
-IncidentLab is intended for:
-
-- Backend engineers
-- Platform engineers
-- DevOps engineers
-- Site Reliability Engineers (SREs)
-- Students learning production-grade backend architecture
+- Configuration management
+- Background processing
+- Event-driven architecture
+- Caching
+- Observability
+- Comprehensive testing
+- CI/CD pipeline
+- Production deployment
 
 ---
 
 # Success Criteria
 
-The project is considered successful when it:
+The project is considered successful when:
 
-- Provides a stable and well-documented foundation.
-- Demonstrates clean architectural separation.
-- Supports incremental feature delivery.
-- Maintains consistent API behavior.
-- Can evolve without significant redesign.
-
----
-
-# Release Alignment
-
-Current release:
-
-**v0.5.0 – Error Handling Foundation**
-
-This release establishes a standardized error handling strategy, improving API consistency and preparing the platform for future capabilities such as authentication, validation, observability, and advanced incident workflows.
-
----
-
-# Future Direction
-
-Future releases will focus on:
-
-- Dependency injection
-- Authentication and authorization
-- Incident lifecycle management
-- Root Cause Analysis (RCA)
-- Runbooks
-- Audit history
-- Metrics and observability
-- Cloud-native deployment
-- Event-driven workflows
-- Intelligent operational insights
-
----
-
-# Related Documentation
-
-- `README.md`
-- `docs/architecture.md`
-- `docs/roadmap.md`
-- `docs/changelog.md`
-- `docs/adr/`
-
----
-
-# Summary
-
-IncidentLab is evolving through milestone-based releases into a production-inspired incident management platform. The current release establishes the architectural foundations required for future capabilities while maintaining a clean, modular, and well-documented codebase.
+- Architectural foundations are introduced incrementally.
+- Each release remains backward compatible.
+- Business behavior is preserved while internal architecture improves.
+- Documentation remains synchronized with implementation.
+- Every architectural decision is captured through ADRs.

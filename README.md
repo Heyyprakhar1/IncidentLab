@@ -1,211 +1,186 @@
 # IncidentLab
 
-> **A production-inspired Operations Ownership Platform for designing, operating, investigating, and continuously improving cloud-native systems.**
+A production-inspired backend platform for learning modern backend engineering through incremental architectural evolution.
 
-IncidentLab is a cloud-native engineering platform built incrementally through production-oriented engineering milestones. Instead of demonstrating isolated technologies, the project focuses on building the operational capabilities, architectural foundations, and engineering practices required to manage modern distributed systems.
-
-Every release introduces one architectural capability while preserving maintainability, operational ownership, and engineering discipline.
+Rather than building features first, IncidentLab focuses on establishing strong engineering foundations—including API design, persistence, exception handling, dependency management, and future production capabilities.
 
 ---
 
 # Why IncidentLab Exists
 
-Provisioning cloud infrastructure is easy.
+IncidentLab demonstrates how backend systems evolve over time through small, well-defined architectural milestones.
 
-Operating production systems reliably is not.
-
-IncidentLab exists to explore real operational challenges by building a maintainable platform that evolves the same way production software does—through deliberate architectural improvements, documented engineering decisions, and incremental releases.
-
----
-
-# Project Goals
-
-- Build a maintainable cloud-native platform.
-- Practice production-oriented backend architecture.
-- Model real incident management workflows.
-- Promote operational ownership.
-- Document engineering decisions alongside implementation.
+Each release introduces a single foundational capability while preserving existing behavior and maintaining a clean architecture.
 
 ---
 
 # Current Release
 
-## v0.5.0 — Error Handling Foundation
+**v0.6.0 — Dependency Injection Foundation**
 
-The platform currently includes the following engineering foundations.
+Current architectural foundations:
 
-### Application Foundation
+- API Foundation
+- Persistence Foundation
+- Error Handling Foundation
+- **Dependency Injection Foundation**
+
+---
+
+# Implemented Foundations
+
+## API Foundation
 
 - FastAPI application bootstrap
-- Typed configuration management
-- Environment-based settings
-- Application lifecycle management
-- Health endpoint
-
-### Platform Operations Foundation
-
-- Centralized logging
-- HTTP request logging middleware
-- Startup and shutdown lifecycle logging
-- Configurable log levels
-
-### API Foundation
-
 - Versioned API routing
-- Modular router composition
-- Typed request and response schemas
-- Service layer architecture
-- Separation of HTTP and business logic
+- Request lifecycle management
+- Structured logging middleware
 
-### Persistence Foundation
+---
 
-- SQLAlchemy ORM
+## Persistence Foundation
+
+- SQLAlchemy Async ORM
 - Alembic migrations
-- Repository layer
-- Database session integration
-- Incident creation workflow
-- Incident listing workflow
+- Repository pattern
+- PostgreSQL integration
 
-### Error Handling Foundation
+---
 
-- Global exception handling framework
-- Centralized exception registration
-- Custom application exception hierarchy
-- Resource-specific exceptions (`IncidentNotFoundException`)
-- Standardized API error response model
-- Structured error details
-- Consistent HTTP status handling
-- Production-oriented API failure handling
+## Error Handling Foundation
+
+- Global exception handling
+- Standardized API error responses
+- Domain-specific exceptions
+- Centralized error management
+
+---
+
+## Dependency Injection Foundation
+
+- Dedicated dependency provider layer
+- Repository dependency providers
+- Service dependency providers
+- Centralized object construction
+- Improved separation of concerns
+- FastAPI dependency injection
 
 ---
 
 # High-Level Architecture
 
-```
+```text
                 Client
                    │
                    ▼
-             API Endpoints
+            FastAPI Endpoints
                    │
                    ▼
-            Service Layer
+      Dependency Injection Layer
                    │
-                   ▼
-          Repository Layer
-                   │
-                   ▼
-              PostgreSQL
-
-────────────────────────────────────
-
-Exceptions from any layer
-
-                   │
-                   ▼
-      Global Exception Handler
-                   │
-                   ▼
-     Standardized Error Response
+         ┌─────────┴─────────┐
+         ▼                   ▼
+   Application Services   Database Provider
+         │
+         ▼
+    Repositories
+         │
+         ▼
+     SQLAlchemy ORM
+         │
+         ▼
+      PostgreSQL
 ```
-
-IncidentLab follows a layered architecture where HTTP handling, business logic, persistence, and error handling remain isolated behind clearly defined responsibilities.
 
 ---
 
 # Repository Structure
 
-```
-IncidentLab/
+```text
+apps/
+└── api/
+    ├── app/
+    │   ├── api/
+    │   ├── core/
+    │   ├── db/
+    │   ├── dependencies/
+    │   ├── exceptions/
+    │   ├── middleware/
+    │   ├── models/
+    │   ├── repositories/
+    │   ├── schemas/
+    │   └── services/
+    ├── migrations/
+    └── tests/
 
-├── apps/
-│   └── api/
-│       ├── api/
-│       ├── models/
-│       ├── schemas/
-│       ├── repositories/
-│       ├── services/
-│       ├── exceptions/
-│       ├── middleware/
-│       └── main.py
-│
-├── migrations/
-└── docs/
+docs/
+├── adr/
+├── architecture.md
+├── changelog.md
+├── product-requirements.md
+└── roadmap.md
 ```
 
 ---
 
 # Technology Stack
 
-- Python 3.13
 - FastAPI
-- Pydantic Settings
-- SQLAlchemy
-- Alembic
+- SQLAlchemy 2.x
 - PostgreSQL
+- Alembic
+- Pydantic v2
 - Uvicorn
-- uv
-- Git
-- GitHub
 
 ---
 
 # Roadmap
 
-Upcoming engineering milestones:
+Completed
 
-- Dependency & Configuration Foundation
+- Repository Foundation
+- Platform Operations Foundation
+- API Foundation
+- Persistence Foundation
+- Error Handling Foundation
+- Dependency Injection Foundation
+
+Upcoming
+
 - Authentication & Authorization
-- Incident Lifecycle Management
-- Root Cause Analysis (RCA)
-- Runbooks & Audit History
-- Metrics & Observability
-- Distributed Tracing
-- Kubernetes Integrations
-- Terraform Automation
-- Event-Driven Workflows
-- Automated Remediation
+- Configuration Management
+- Testing Foundation
+- Background Processing
+- Event-Driven Architecture
+- Observability Expansion
 
 ---
 
 # Documentation
 
-Detailed engineering documentation is maintained under the `docs/` directory.
+Project documentation is available under the `docs/` directory.
 
-| Document | Purpose |
-|----------|---------|
-| `docs/vision.md` | Long-term platform vision |
-| `docs/product-requirements.md` | Product scope and requirements |
-| `docs/architecture.md` | System architecture |
-| `docs/roadmap.md` | Engineering roadmap |
-| `docs/changelog.md` | Release history |
-| `docs/adr/` | Architectural Decision Records |
+Key documents include:
+
+- Architecture
+- Product Requirements
+- Roadmap
+- ADRs
+- Changelog
 
 ---
 
 # Development Workflow
 
-Every release follows a controlled engineering workflow:
+Each release follows a milestone-based workflow:
 
-```
-Engineering Work
-        │
-        ▼
-    feature/*
-        │
-        ▼
-Code Review & Validation
-        │
-        ▼
-       main
-        │
-        ▼
-Documentation Update
-        │
-        ▼
-   Release Tag
-```
-
-Documentation is updated only after implementation becomes part of the stable `main` branch.
+1. Create feature branch
+2. Design (ADR)
+3. Implementation
+4. Architecture Review
+5. Documentation
+6. Merge into `main`
+7. Release Tag
 
 ---
 
@@ -213,18 +188,15 @@ Documentation is updated only after implementation becomes part of the stable `m
 
 | Version | Milestone |
 |----------|-----------|
-| v0.1.0 | Repository Foundation |
-| v0.2.0 | Platform Operations Foundation |
-| v0.3.0 | API Foundation |
-| v0.4.0 | Persistence Foundation |
+| v0.6.0 | Dependency Injection Foundation |
 | v0.5.0 | Error Handling Foundation |
+| v0.4.0 | Persistence Foundation |
+| v0.3.0 | API Foundation |
+| v0.2.0 | Platform Operations Foundation |
+| v0.1.0 | Repository Foundation |
 
 ---
 
 # Repository Status
 
-IncidentLab is an actively evolving production-inspired cloud-native platform.
-
-Rather than prioritizing rapid feature delivery, the project focuses on incremental engineering milestones that improve architectural maturity, operational ownership, and long-term maintainability.
-
-Every release represents a stable combination of source code, documentation, architecture, and engineering decisions.
+Current development follows an architecture-first approach where each release introduces one foundational capability while maintaining backward compatibility and preserving existing application behavior.

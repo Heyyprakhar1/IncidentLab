@@ -1,20 +1,6 @@
 # IncidentLab Roadmap
 
-IncidentLab evolves through incremental engineering milestones.
-
-Rather than delivering many unrelated features, each release introduces one architectural capability while preserving maintainability, operational ownership, and engineering quality.
-
----
-
-# Roadmap Philosophy
-
-Every milestone should:
-
-- Solve one architectural problem.
-- Improve platform maturity.
-- Preserve existing stability.
-- Extend the platform without major redesign.
-- Be fully documented before release.
+IncidentLab evolves through milestone-based architectural releases. Each version introduces a single foundational capability while preserving existing application behavior.
 
 ---
 
@@ -22,167 +8,92 @@ Every milestone should:
 
 ## v0.1.0 — Repository Foundation
 
-Completed:
-
-- Repository initialization
-- Project structure
-- FastAPI bootstrap
-- Environment configuration
-- Health endpoint
-- Initial engineering documentation
+- Initial repository structure
+- Documentation foundation
+- Project vision
 
 ---
 
 ## v0.2.0 — Platform Operations Foundation
 
-Completed:
-
-- Centralized logging
-- HTTP request logging middleware
-- Startup and shutdown lifecycle logging
-- Configurable log levels
+- Docker-based development environment
+- Environment configuration
+- Project bootstrap
 
 ---
 
 ## v0.3.0 — API Foundation
 
-Completed:
-
+- FastAPI application bootstrap
 - Versioned API routing
-- Modular router composition
-- Typed request and response schemas
-- Service layer architecture
-- Separation of HTTP and business logic
+- Logging middleware
+- Request lifecycle
 
 ---
 
 ## v0.4.0 — Persistence Foundation
 
-Completed:
-
-- SQLAlchemy ORM integration
-- Repository layer
+- SQLAlchemy Async ORM
+- PostgreSQL integration
 - Alembic migrations
-- Database session management
-- Incident creation workflow
-- Incident listing workflow
+- Repository pattern
 
 ---
 
 ## v0.5.0 — Error Handling Foundation
 
+- Global exception handling
+- Standardized API error responses
+- Domain-specific exceptions
+- Centralized error management
+
+---
+
+## v0.6.0 — Dependency Injection Foundation ✅
+
 Completed:
 
-- Global exception handling framework
-- Centralized exception registration
-- Custom application exception hierarchy
-- Standardized API error responses
-- Production-oriented failure handling
+- Dependency provider layer
+- Repository providers
+- Service providers
+- Centralized object construction
+- FastAPI dependency injection
+- Improved separation of concerns
 
 ---
 
 # Upcoming Milestones
 
-## Dependency & Configuration Foundation
+## v0.7.0 — Authentication Foundation
 
-Planned:
+Planned capabilities:
 
-- Shared dependency providers
-- Dependency injection
-- Common application dependencies
-- Configuration improvements
-
----
-
-## Authentication & Authorization
-
-Planned:
-
-- User authentication
-- JWT-based authorization
-- Role-based access control
-- Protected API endpoints
+- User model
+- Password hashing
+- JWT authentication
+- Login endpoint
+- Protected routes
 
 ---
 
-## Incident Operations
+## v0.8.0 — Authorization Foundation
 
-Planned:
+Planned capabilities:
 
-- Incident lifecycle management
-- Status transitions
-- Timeline events
-- Root Cause Analysis (RCA)
-- Runbooks
-- Audit history
+- Role-Based Access Control (RBAC)
+- Permission model
+- Route authorization
+- Policy enforcement
 
 ---
 
-## Observability Foundation
+## Future Roadmap
 
-Planned:
-
-- Metrics
-- Prometheus integration
-- Grafana dashboards
-- Structured logging improvements
-- Health monitoring
-
----
-
-## Cloud-Native Platform
-
-Planned:
-
-- Kubernetes deployment
-- Container orchestration
-- Infrastructure as Code
-- Terraform automation
-- Cloud integrations
-
----
-
-## Platform Intelligence
-
-Long-term vision:
-
-- Event-driven workflows
-- Automated remediation
-- Intelligent incident analysis
-- AI-assisted operational insights
-- Predictive reliability engineering
-
----
-
-# Release Strategy
-
-Each milestone follows the same engineering lifecycle.
-
-```
-Engineering Work
-        │
-        ▼
-    feature/*
-        │
-        ▼
-Code Review & Validation
-        │
-        ▼
-       main
-        │
-        ▼
-Documentation Update
-        │
-        ▼
-   Release Tag
-```
-
-Only stable, documented, and validated capabilities become part of an official release.
-
----
-
-# Long-Term Vision
-
-The long-term objective is to evolve IncidentLab into a production-inspired Operations Ownership Platform capable of supporting the complete incident lifecycle—from detection and investigation to resolution, automation, and continuous operational improvement.
-
-Every milestone should strengthen the platform while preserving simplicity, maintainability, and architectural consistency.
+- Configuration management
+- Background task processing
+- Event-driven architecture
+- Caching layer
+- Observability expansion
+- Comprehensive testing
+- CI/CD pipeline
+- Production deployment

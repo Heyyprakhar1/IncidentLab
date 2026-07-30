@@ -1,110 +1,97 @@
 # Changelog
 
-All notable changes to IncidentLab are documented in this file.
+All notable architectural changes to IncidentLab are documented in this file.
 
-The project follows an incremental engineering approach where every release introduces one architectural capability while preserving maintainability, operational ownership, and documentation quality.
-
----
-
-# Release History
-
-## v0.5.0 — Error Handling Foundation
-
-**Release Date:** TBD
-
-### Added
-
-- Global exception handling framework
-- Centralized exception registration
-- Custom application exception hierarchy
-- `IncidentNotFoundException`
-- Standardized `ErrorResponse` model
-- `ErrorDetail` model
-- Consistent API error responses
-- Production-oriented API failure handling
-
-### Improved
-
-- Centralized HTTP error formatting
-- Consistent error handling across application layers
-- Improved API reliability and maintainability
-
-### Documentation
-
-- Updated project documentation for v0.5.0
-- Added Architecture Decision Record for Global Exception Handling
-- Updated engineering roadmap
-- Updated architecture documentation
+IncidentLab follows a milestone-driven release model where each version introduces a single foundational capability while preserving existing application behavior.
 
 ---
 
-## v0.4.0 — Persistence Foundation
+# v0.6.0 — Dependency Injection Foundation
 
-### Added
+**Release Date:** 2026-07-30
 
-- SQLAlchemy ORM integration
-- Repository layer
-- Alembic migrations
-- Database session management
-- Incident creation workflow
-- Incident listing workflow
+## Added
 
-### Improved
+- Introduced a dedicated dependency provider layer.
+- Added repository dependency providers.
+- Added service dependency providers.
+- Added database dependency re-export provider.
+- Added ADR-004 documenting the Dependency Injection architecture.
 
-- Clear separation between business logic and persistence
-- Foundation for future data operations
+## Changed
 
----
+- API endpoints now receive services through FastAPI dependency injection.
+- Services now receive repositories through dependency injection.
+- Repository construction has been centralized.
+- Object creation responsibilities have been removed from business components.
 
-## v0.3.0 — API Foundation
+## Improved
 
-### Added
-
-- Versioned API routing
-- Modular router composition
-- Typed request schemas
-- Typed response schemas
-- Service layer architecture
-
-### Improved
-
-- Separation of HTTP handling from business logic
-- Maintainable API structure
+- Reduced coupling between API, service, and repository layers.
+- Improved separation of concerns.
+- Established a scalable dependency graph for future features.
+- Preserved application behavior while improving internal architecture.
 
 ---
 
-## v0.2.0 — Platform Operations Foundation
+# v0.5.0 — Error Handling Foundation
 
-### Added
+## Added
 
-- Centralized logging
-- HTTP request logging middleware
-- Startup lifecycle logging
-- Shutdown lifecycle logging
-- Configurable log levels
+- Global exception handling.
+- Standardized API error responses.
+- Custom domain exceptions.
+- Centralized exception handlers.
 
-### Improved
+## Improved
 
-- Operational visibility
-- Platform observability foundation
+- Consistent error responses.
+- Cleaner controller logic.
+- Better separation of concerns.
 
 ---
 
-## v0.1.0 — Repository Foundation
+# v0.4.0 — Persistence Foundation
 
-### Added
+## Added
 
-- Initial repository structure
-- FastAPI application bootstrap
-- Environment-based configuration
-- Health endpoint
-- Initial engineering documentation
+- SQLAlchemy Async ORM.
+- Alembic migrations.
+- Repository pattern.
+- PostgreSQL persistence layer.
 
-### Established
+---
 
-- Project vision
-- Engineering principles
-- Incremental development strategy
+# v0.3.0 — API Foundation
+
+## Added
+
+- FastAPI application bootstrap.
+- Versioned API routing.
+- Request logging middleware.
+- Structured application lifecycle.
+
+---
+
+# v0.2.0 — Platform Operations Foundation
+
+## Added
+
+- Containerized development environment.
+- Docker support.
+- Environment configuration.
+- Initial project structure.
+
+---
+
+# v0.1.0 — Repository Foundation
+
+## Added
+
+- Initial repository.
+- Documentation structure.
+- Project vision.
+- Development roadmap.
 
 ---
 
@@ -112,17 +99,4 @@ The project follows an incremental engineering approach where every release intr
 
 IncidentLab follows milestone-based versioning.
 
-Each release represents a stable combination of:
-
-- Source code
-- Architecture
-- Documentation
-- Engineering decisions
-
-New versions are released only after:
-
-1. Feature implementation is complete.
-2. Validation is successful.
-3. Documentation is updated.
-4. Architectural decisions are recorded (when applicable).
-5. The release is tagged from the `main` branch.
+Each release introduces one architectural capability, validates its implementation, updates documentation, and creates a tagged release before moving to the next milestone.
