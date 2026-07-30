@@ -3,5 +3,9 @@ Application ORM models.
 """
 
 from app.models.incident import Incident
+from app.models.user import User
 
-__all__ = ["Incident"]
+__all__ = [
+    "Incident",
+    "User",
+]

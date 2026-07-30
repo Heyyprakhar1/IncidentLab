@@ -21,9 +21,9 @@ Non-Responsibilities
 
 from fastapi import APIRouter, Depends, Path, status
 
-from app.dependencies.services import (
-    get_incident_service,
-)
+from app.dependencies.auth import get_current_user
+from app.dependencies.services import get_incident_service
+from app.models.user import User
 from app.schemas import IncidentCreate, IncidentResponse
 from app.services import IncidentService
 
@@ -40,13 +40,15 @@ router = APIRouter(
 )
 async def create_incident(
     incident: IncidentCreate,
-    service: IncidentService = Depends(
-        get_incident_service
-    ),
+    current_user: User = Depends(get_current_user),
+    service: IncidentService = Depends(get_incident_service),
 ) -> IncidentResponse:
     """
     Create a new incident.
     """
+
+    # Reserved for future ownership support.
+    _ = current_user
 
     return await service.create_incident(
         incident
@@ -59,13 +61,14 @@ async def create_incident(
     status_code=status.HTTP_200_OK,
 )
 async def list_incidents(
-    service: IncidentService = Depends(
-        get_incident_service
-    ),
+    current_user: User = Depends(get_current_user),
+    service: IncidentService = Depends(get_incident_service),
 ) -> list[IncidentResponse]:
     """
     Retrieve all incidents.
     """
+
+    _ = current_user
 
     return await service.list_incidents()
 
@@ -81,13 +84,14 @@ async def get_incident(
         gt=0,
         description="Unique identifier of the incident.",
     ),
-    service: IncidentService = Depends(
-        get_incident_service
-    ),
+    current_user: User = Depends(get_current_user),
+    service: IncidentService = Depends(get_incident_service),
 ) -> IncidentResponse:
     """
     Retrieve a single incident by its identifier.
     """
+
+    _ = current_user
 
     return await service.get_incident(
         incident_id
