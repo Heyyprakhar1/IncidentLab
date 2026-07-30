@@ -20,9 +20,10 @@ Non-Responsibilities
 """
 
 from fastapi import APIRouter, Depends, Path, status
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.database import get_db
+from app.dependencies.services import (
+    get_incident_service,
+)
 from app.schemas import IncidentCreate, IncidentResponse
 from app.services import IncidentService
 
@@ -39,15 +40,17 @@ router = APIRouter(
 )
 async def create_incident(
     incident: IncidentCreate,
-    db: AsyncSession = Depends(get_db),
+    service: IncidentService = Depends(
+        get_incident_service
+    ),
 ) -> IncidentResponse:
     """
     Create a new incident.
     """
 
-    service = IncidentService(db)
-
-    return await service.create_incident(incident)
+    return await service.create_incident(
+        incident
+    )
 
 
 @router.get(
@@ -56,13 +59,13 @@ async def create_incident(
     status_code=status.HTTP_200_OK,
 )
 async def list_incidents(
-    db: AsyncSession = Depends(get_db),
+    service: IncidentService = Depends(
+        get_incident_service
+    ),
 ) -> list[IncidentResponse]:
     """
     Retrieve all incidents.
     """
-
-    service = IncidentService(db)
 
     return await service.list_incidents()
 
@@ -78,13 +81,13 @@ async def get_incident(
         gt=0,
         description="Unique identifier of the incident.",
     ),
-    db: AsyncSession = Depends(get_db),
+    service: IncidentService = Depends(
+        get_incident_service
+    ),
 ) -> IncidentResponse:
     """
     Retrieve a single incident by its identifier.
     """
-
-    service = IncidentService(db)
 
     return await service.get_incident(
         incident_id

@@ -22,8 +22,6 @@ Notes
 The service layer represents the application's business use cases.
 """
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.exceptions import IncidentNotFoundException
 from app.models import Incident
 from app.repositories import IncidentRepository
@@ -37,9 +35,9 @@ class IncidentService:
 
     def __init__(
         self,
-        db: AsyncSession,
+        repository: IncidentRepository,
     ) -> None:
-        self.repository = IncidentRepository(db)
+        self.repository = repository
 
     async def create_incident(
         self,
