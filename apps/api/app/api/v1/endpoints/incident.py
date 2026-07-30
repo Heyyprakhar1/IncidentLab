@@ -19,7 +19,7 @@ Non-Responsibilities
 - ORM operations.
 """
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Path, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
@@ -65,3 +65,27 @@ async def list_incidents(
     service = IncidentService(db)
 
     return await service.list_incidents()
+
+
+@router.get(
+    "/{incident_id}",
+    response_model=IncidentResponse,
+    status_code=status.HTTP_200_OK,
+)
+async def get_incident(
+    incident_id: int = Path(
+        ...,
+        gt=0,
+        description="Unique identifier of the incident.",
+    ),
+    db: AsyncSession = Depends(get_db),
+) -> IncidentResponse:
+    """
+    Retrieve a single incident by its identifier.
+    """
+
+    service = IncidentService(db)
+
+    return await service.get_incident(
+        incident_id
+    )
