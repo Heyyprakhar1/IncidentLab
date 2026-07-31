@@ -2,7 +2,7 @@
 
 A production-inspired backend platform for learning modern backend engineering through incremental architectural evolution.
 
-Rather than building features first, IncidentLab focuses on establishing strong engineering foundations—including API design, persistence, exception handling, dependency management, and future production capabilities.
+Rather than building features first, IncidentLab focuses on establishing strong engineering foundations—including API design, persistence, dependency injection, authentication, exception handling, and future production capabilities.
 
 ---
 
@@ -16,14 +16,15 @@ Each release introduces a single foundational capability while preserving existi
 
 # Current Release
 
-**v0.6.0 — Dependency Injection Foundation**
+**v0.7.0 — Authentication Foundation**
 
 Current architectural foundations:
 
 - API Foundation
 - Persistence Foundation
 - Error Handling Foundation
-- **Dependency Injection Foundation**
+- Dependency Injection Foundation
+- Authentication Foundation
 
 ---
 
@@ -67,29 +68,46 @@ Current architectural foundations:
 
 ---
 
+## Authentication Foundation
+
+- JWT-based authentication
+- User registration
+- User login
+- Password hashing using Argon2
+- HTTP Bearer authentication
+- Protected API endpoints
+- Current user dependency injection
+
+---
+
 # High-Level Architecture
 
 ```text
-                Client
-                   │
-                   ▼
-            FastAPI Endpoints
-                   │
-                   ▼
-      Dependency Injection Layer
-                   │
-         ┌─────────┴─────────┐
-         ▼                   ▼
-   Application Services   Database Provider
-         │
-         ▼
-    Repositories
-         │
-         ▼
-     SQLAlchemy ORM
-         │
-         ▼
-      PostgreSQL
+                  Client
+                     │
+                     ▼
+      Authorization: Bearer <JWT>
+                     │
+                     ▼
+             FastAPI Endpoints
+                     │
+                     ▼
+      Authentication Dependency
+                     │
+                     ▼
+       Dependency Injection Layer
+          ┌──────────┴──────────┐
+          ▼                     ▼
+ Application Services     Database Provider
+          │
+          ▼
+     Repository Layer
+          │
+          ▼
+     SQLAlchemy Async ORM
+          │
+          ▼
+        PostgreSQL
 ```
 
 ---
@@ -101,6 +119,7 @@ apps/
 └── api/
     ├── app/
     │   ├── api/
+    │   ├── auth/
     │   ├── core/
     │   ├── db/
     │   ├── dependencies/
@@ -123,6 +142,26 @@ docs/
 
 ---
 
+# API Endpoints
+
+## Authentication
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/v1/auth/register` | Register a new user |
+| POST | `/api/v1/auth/login` | Authenticate user and receive JWT |
+| GET | `/api/v1/auth/me` | Retrieve authenticated user |
+
+## Incidents
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/v1/incidents` | Create incident *(Authentication Required)* |
+| GET | `/api/v1/incidents` | List incidents *(Authentication Required)* |
+| GET | `/api/v1/incidents/{id}` | Retrieve incident by ID *(Authentication Required)* |
+
+---
+
 # Technology Stack
 
 - FastAPI
@@ -130,13 +169,15 @@ docs/
 - PostgreSQL
 - Alembic
 - Pydantic v2
+- PyJWT
+- pwdlib (Argon2)
 - Uvicorn
 
 ---
 
 # Roadmap
 
-Completed
+## Completed
 
 - Repository Foundation
 - Platform Operations Foundation
@@ -144,15 +185,17 @@ Completed
 - Persistence Foundation
 - Error Handling Foundation
 - Dependency Injection Foundation
+- Authentication Foundation
 
-Upcoming
+## Upcoming
 
-- Authentication & Authorization
-- Configuration Management
-- Testing Foundation
-- Background Processing
-- Event-Driven Architecture
-- Observability Expansion
+- Containerization
+- CI/CD Foundation
+- Infrastructure as Code
+- Kubernetes
+- Observability
+- DevSecOps
+- Authorization (RBAC)
 
 ---
 
@@ -172,14 +215,14 @@ Key documents include:
 
 # Development Workflow
 
-Each release follows a milestone-based workflow:
+Each release follows an architecture-first workflow:
 
-1. Create feature branch
-2. Design (ADR)
-3. Implementation
-4. Architecture Review
-5. Documentation
-6. Merge into `main`
+1. Requirements
+2. Architecture Decision Record (ADR)
+3. Implementation (Feature Branch)
+4. Testing
+5. Merge into `main`
+6. Documentation
 7. Release Tag
 
 ---
@@ -188,6 +231,7 @@ Each release follows a milestone-based workflow:
 
 | Version | Milestone |
 |----------|-----------|
+| v0.7.0 | Authentication Foundation |
 | v0.6.0 | Dependency Injection Foundation |
 | v0.5.0 | Error Handling Foundation |
 | v0.4.0 | Persistence Foundation |
@@ -199,4 +243,6 @@ Each release follows a milestone-based workflow:
 
 # Repository Status
 
-Current development follows an architecture-first approach where each release introduces one foundational capability while maintaining backward compatibility and preserving existing application behavior.
+IncidentLab follows an architecture-first, milestone-driven development approach where each release introduces one foundational capability while maintaining backward compatibility and preserving clean software architecture.
+
+The project is currently focused on evolving into a production-grade cloud-native backend platform through incremental engineering milestones.

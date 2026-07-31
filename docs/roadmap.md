@@ -49,7 +49,7 @@ IncidentLab evolves through milestone-based architectural releases. Each version
 
 ---
 
-## v0.6.0 — Dependency Injection Foundation ✅
+## v0.6.0 — Dependency Injection Foundation
 
 Completed:
 
@@ -62,38 +62,106 @@ Completed:
 
 ---
 
-# Upcoming Milestones
-
 ## v0.7.0 — Authentication Foundation
 
-Planned capabilities:
+Completed:
 
 - User model
-- Password hashing
+- User registration
+- User login
 - JWT authentication
-- Login endpoint
-- Protected routes
+- Password hashing using Argon2
+- HTTP Bearer authentication
+- Current user dependency injection
+- Protected API endpoints
 
 ---
 
-## v0.8.0 — Authorization Foundation
+# Upcoming Milestones
+
+## v0.8.0 — Containerization Foundation
 
 Planned capabilities:
 
-- Role-Based Access Control (RBAC)
-- Permission model
-- Route authorization
-- Policy enforcement
+- Multi-stage Docker builds
+- Docker Compose
+- Development container
+- Production container
+- Environment variable management
+- Health checks
+- Container networking
+
+---
+
+## v0.9.0 — CI/CD Foundation
+
+Planned capabilities:
+
+- GitHub Actions
+- Automated testing
+- Linting
+- Docker image build & publish
+- Release automation
+
+---
+
+## v0.10.0 — Infrastructure as Code Foundation
+
+Planned capabilities:
+
+- Terraform
+- AWS infrastructure provisioning
+- Networking
+- Compute resources
+- Infrastructure modules
+
+---
+
+## v0.11.0 — Kubernetes Foundation
+
+Planned capabilities:
+
+- Kubernetes deployments
+- Services
+- ConfigMaps
+- Secrets
+- Ingress
+- Horizontal scaling
+
+---
+
+## v0.12.0 — Observability Foundation
+
+Planned capabilities:
+
+- Prometheus
+- Grafana
+- Loki
+- Metrics
+- Logs
+- Health monitoring
+
+---
+
+## v0.13.0 — DevSecOps Foundation
+
+Planned capabilities:
+
+- Trivy
+- Gitleaks
+- Bandit
+- Hadolint
+- Security scanning
+- Secure CI/CD pipeline
 
 ---
 
 ## Future Roadmap
 
-- Configuration management
+- Role-Based Access Control (RBAC)
+- Audit logging
 - Background task processing
 - Event-driven architecture
 - Caching layer
-- Observability expansion
 - Comprehensive testing
-- CI/CD pipeline
 - Production deployment

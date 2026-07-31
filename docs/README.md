@@ -8,9 +8,9 @@ Documentation evolves alongside each architectural milestone and reflects the cu
 
 # Current Release
 
-**v0.6.0 – Dependency Injection Foundation**
+**v0.7.0 – Authentication Foundation**
 
-This release introduces centralized dependency management using FastAPI's dependency injection system, improving separation of concerns and reducing coupling between application layers.
+This release introduces stateless JWT-based authentication, secure password hashing using Argon2, user authentication workflows, and protected API endpoints while extending the existing Dependency Injection Foundation.
 
 ---
 
@@ -20,7 +20,7 @@ This release introduces centralized dependency management using FastAPI's depend
 
 - `architecture.md`
 
-Describes the overall system architecture, layering, component interactions, and dependency flow.
+Describes the overall system architecture, layering, component interactions, authentication flow, and dependency graph.
 
 ---
 
@@ -48,6 +48,14 @@ Records milestone-based release history.
 
 ---
 
+## Release History
+
+- `release-history.md`
+
+Documents the engineering evolution of IncidentLab across each architectural milestone.
+
+---
+
 ## Architecture Decision Records (ADR)
 
 Located in:
@@ -61,9 +69,10 @@ Current ADRs:
 | ADR | Title | Status |
 |-----|-------|--------|
 | ADR-001 | Repository Foundation | Accepted |
-| ADR-002 | Persistence Foundation | Accepted |
+| ADR-002 | Layered Application Architecture | Accepted |
 | ADR-003 | Global Exception Handling | Accepted |
 | ADR-004 | Dependency Injection Foundation | Accepted |
+| ADR-005 | Authentication Foundation | Accepted |
 
 ---
 
@@ -84,15 +93,19 @@ IncidentLab documentation follows these principles:
 Every architectural milestone follows:
 
 ```text
-ADR
-    ↓
-Implementation
-    ↓
-Architecture Review
-    ↓
+Requirements
+      ↓
+Architecture Decision Record (ADR)
+      ↓
+Implementation (Feature Branch)
+      ↓
+Testing
+      ↓
+Merge into main
+      ↓
 Documentation
-    ↓
-Release
+      ↓
+Release Tag
 ```
 
-Documentation is updated only after implementation has been completed and verified.
+Documentation is updated only after implementation has been completed, reviewed, and merged into the main branch.

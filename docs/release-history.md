@@ -35,6 +35,211 @@ MAJOR.MINOR.PATCH
 
 ---
 
+# v0.7.0 — Authentication Foundation
+
+**Release Status**
+
+Released
+
+**Engineering Theme**
+
+Authentication Foundation
+
+---
+
+## Highlights
+
+### Added
+
+* JWT-based authentication
+* User registration
+* User login
+* Current user endpoint (`/auth/me`)
+* HTTP Bearer authentication
+* Password hashing using Argon2
+* Authentication service
+* User repository
+* User database model
+* Authentication dependency providers
+* Protected incident endpoints
+
+---
+
+### Improved
+
+* Introduced stateless authentication across the platform.
+* Extended the Dependency Injection layer to support authentication services.
+* Established a reusable authentication module.
+* Secured API endpoints using JWT authentication.
+
+---
+
+### Architecture
+
+Introduced the authentication layer:
+
+```
+Client
+      │
+      ▼
+HTTP Bearer Authentication
+      │
+      ▼
+Authentication Dependency
+      │
+      ▼
+Service Layer
+      │
+      ▼
+Repository Layer
+      │
+      ▼
+Database
+```
+
+New architectural components:
+
+* `auth/`
+* `dependencies/auth.py`
+* `models/user.py`
+* `repositories/user.py`
+* `services/auth.py`
+
+---
+
+**Outcome**
+
+IncidentLab transitioned from an open backend API into an authenticated platform capable of securing application workflows while preserving its layered architecture.
+
+---
+
+# v0.6.0 — Dependency Injection Foundation
+
+**Release Status**
+
+Released
+
+**Engineering Theme**
+
+Dependency Injection Foundation
+
+---
+
+## Highlights
+
+### Added
+
+* Dedicated dependency provider layer
+* Repository dependency providers
+* Service dependency providers
+* Centralized object construction
+* FastAPI dependency injection
+
+---
+
+### Improved
+
+* Eliminated manual dependency construction.
+* Improved modularity and testability.
+* Centralized dependency management across the application.
+
+---
+
+### Architecture
+
+Introduced the Dependency Injection layer:
+
+```
+API Layer
+      │
+      ▼
+Dependency Layer
+      │
+      ▼
+Service Layer
+      │
+      ▼
+Repository Layer
+      │
+      ▼
+Database
+```
+
+New architectural components:
+
+* `dependencies/`
+
+---
+
+**Outcome**
+
+Application components became loosely coupled through centralized dependency management, providing a scalable foundation for future architectural capabilities.
+
+---
+
+# v0.5.0 — Error Handling Foundation
+
+**Release Status**
+
+Released
+
+**Engineering Theme**
+
+Error Handling Foundation
+
+---
+
+## Highlights
+
+### Added
+
+* Global exception handlers
+* Domain-specific exceptions
+* Standardized API error responses
+* Centralized exception management
+
+---
+
+### Improved
+
+* Unified API error handling.
+* Improved consistency across failure scenarios.
+* Simplified exception propagation through application layers.
+
+---
+
+### Architecture
+
+Introduced centralized exception handling:
+
+```
+Repository
+      │
+      ▼
+Service
+      │
+      ▼
+Exception
+      │
+      ▼
+Global Exception Handler
+      │
+      ▼
+HTTP Response
+```
+
+New architectural components:
+
+* `exceptions/`
+
+---
+
+**Outcome**
+
+IncidentLab established a predictable and maintainable error handling model across the platform.
+
+---
+
 # v0.4.0 — Persistence Foundation
 
 **Release Status**
@@ -77,21 +282,17 @@ Introduced the persistence layer:
 
 ```
 API Layer
-
-      ↓
-
+      │
+      ▼
 Service Layer
-
-      ↓
-
+      │
+      ▼
 Repository Layer
-
-      ↓
-
+      │
+      ▼
 Database Models
-
-      ↓
-
+      │
+      ▼
 Database
 ```
 
@@ -106,8 +307,6 @@ New architectural components:
 **Outcome**
 
 IncidentLab transitioned from an API-only foundation into a database-backed platform.
-
-The application now supports persistent workflows while maintaining clear separation between HTTP handling, business logic, and database operations.
 
 ---
 
@@ -146,13 +345,11 @@ API Foundation
 
 ### Architecture
 
-Introduced the following architectural layers:
+Introduced:
 
 * `api/`
 * `services/`
 * `schemas/`
-
-This established a structured API architecture capable of supporting future platform capabilities.
 
 ---
 
@@ -197,7 +394,7 @@ Platform Operations Foundation
 
 ### Architecture
 
-Introduced foundational platform modules:
+Introduced:
 
 * `config.py`
 * `lifespan.py`
@@ -259,28 +456,30 @@ The project transitioned from an idea into a structured engineering initiative w
 
 # Release Summary
 
-| Version | Theme                          | Status   |
-| ------- | ------------------------------ | -------- |
-| v0.4.0  | Persistence Foundation         | Released |
-| v0.3.0  | API Foundation                 | Released |
-| v0.2.0  | Platform Operations Foundation | Released |
-| v0.1.0  | Repository Foundation          | Released |
+| Version | Theme | Status |
+|----------|-------|--------|
+| v0.7.0 | Authentication Foundation | Released |
+| v0.6.0 | Dependency Injection Foundation | Released |
+| v0.5.0 | Error Handling Foundation | Released |
+| v0.4.0 | Persistence Foundation | Released |
+| v0.3.0 | API Foundation | Released |
+| v0.2.0 | Platform Operations Foundation | Released |
+| v0.1.0 | Repository Foundation | Released |
 
 ---
 
 # Upcoming Release
 
-## v0.5.0 — Application Reliability Foundation
+## v0.8.0 — Containerization Foundation
 
 Planned engineering focus:
 
-* Global exception handling
-* Standard error response models
-* Custom application exceptions
-* Improved API failure handling
-* Consistent error management patterns
-
-The objective is to establish a predictable execution model before introducing authentication and advanced platform workflows.
+* Multi-stage Docker builds
+* Docker Compose
+* Development and production containerization
+* Environment variable management
+* Health checks
+* Container networking
 
 ---
 
@@ -298,5 +497,4 @@ The goal is sustainable engineering progress through:
 * Maintainable code organization
 * Documented engineering decisions
 
-The release history represents the platform's journey from repository foundation to a production-inspired cloud-native system.
-
+The release history represents the platform's journey from repository foundation toward a production-grade cloud-native backend platform.

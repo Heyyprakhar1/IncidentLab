@@ -2,7 +2,7 @@
 
 IncidentLab follows a layered architecture that emphasizes separation of concerns, maintainability, and incremental architectural evolution.
 
-Beginning with **v0.6.0 – Dependency Injection Foundation**, application components no longer construct their own dependencies. Instead, object creation is delegated to dedicated dependency providers managed through FastAPI's dependency injection system.
+Beginning with **v0.7.0 – Authentication Foundation**, the architecture introduces a dedicated authentication layer built on top of the Dependency Injection Foundation. Authentication is implemented using stateless JSON Web Tokens (JWT) and integrates seamlessly with FastAPI's dependency injection system.
 
 ---
 
@@ -15,6 +15,7 @@ The project follows these principles:
 - Dependency Injection
 - Repository Pattern
 - Layered Architecture
+- Stateless Authentication
 - Incremental Evolution
 - Production-Inspired Design
 
@@ -23,26 +24,30 @@ The project follows these principles:
 # High-Level Architecture
 
 ```text
-                 Client
-                    │
-                    ▼
+                  Client
+                     │
+      Authorization: Bearer <JWT>
+                     │
+                     ▼
              FastAPI Endpoints
-                    │
-                    ▼
+                     │
+                     ▼
+      Authentication Dependency
+                     │
+                     ▼
        Dependency Injection Layer
-                    │
-         ┌──────────┴──────────┐
-         ▼                     ▼
+          ┌──────────┴──────────┐
+          ▼                     ▼
  Application Services    Database Provider
-         │
-         ▼
-    Repository Layer
-         │
-         ▼
+          │
+          ▼
+     Repository Layer
+          │
+          ▼
     SQLAlchemy Async ORM
-         │
-         ▼
-       PostgreSQL
+          │
+          ▼
+        PostgreSQL
 ```
 
 ---
@@ -68,6 +73,27 @@ The API layer contains no business logic and performs no manual object construct
 
 ---
 
+## Authentication Layer
+
+Location:
+
+```text
+app/auth/
+app/dependencies/auth.py
+```
+
+Responsibilities:
+
+- Password hashing
+- Password verification
+- JWT generation
+- JWT validation
+- Current user resolution
+
+Authentication is implemented using HTTP Bearer tokens and integrated through FastAPI dependency injection.
+
+---
+
 ## Dependency Layer
 
 Location:
@@ -81,6 +107,7 @@ Responsibilities:
 - Database dependency providers
 - Repository dependency providers
 - Service dependency providers
+- Authentication dependency providers
 
 This layer centralizes object creation and manages dependency relationships across the application.
 
@@ -98,6 +125,7 @@ Responsibilities:
 
 - Business logic
 - Application use cases
+- User authentication
 - Coordination between layers
 
 Services consume repositories through dependency injection and remain independent of database session management.
@@ -143,16 +171,37 @@ Database session creation remains centralized through `get_db()`.
 
 # Dependency Flow
 
-The dependency graph introduced in v0.6.0 is:
+Authentication requests follow the dependency graph below:
+
+```text
+Protected Endpoint
+        │
+        ▼
+get_current_user()
+        │
+        ▼
+decode_access_token()
+        │
+        ▼
+get_user_repository()
+        │
+        ▼
+get_db()
+        │
+        ▼
+AsyncSession
+```
+
+Application services continue to follow:
 
 ```text
 API Endpoint
       │
       ▼
-get_incident_service()
+get_service()
       │
       ▼
-get_incident_repository()
+get_repository()
       │
       ▼
 get_db()
@@ -169,6 +218,9 @@ Each layer depends only on the layer directly beneath it.
 
 ```text
 Client Request
+      │
+      ▼
+Authentication
       │
       ▼
 Endpoint
@@ -230,6 +282,7 @@ Implemented architectural foundations:
 - Persistence Foundation
 - Error Handling Foundation
 - Dependency Injection Foundation
+- Authentication Foundation
 
 ---
 
@@ -237,13 +290,12 @@ Implemented architectural foundations:
 
 The current architecture prepares IncidentLab for future milestones including:
 
-- Authentication
-- Authorization
-- Configuration Providers
-- Background Tasks
-- Event-Driven Processing
-- Caching
+- Containerization
+- CI/CD
+- Infrastructure as Code
+- Kubernetes
 - Observability
-- Comprehensive Testing
+- DevSecOps
+- Authorization (RBAC)
 
-Each future capability will build upon the existing layered architecture while preserving separation of concerns and centralized dependency management.
+Each future capability will build upon the existing layered architecture while preserving separation of concerns, centralized dependency management, and a secure authentication model.
