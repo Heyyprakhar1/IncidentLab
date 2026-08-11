@@ -6,6 +6,312 @@ The project follows an architecture-first, milestone-driven development approach
 
 ---
 
+# v0.8.0 — Containerization Foundation
+
+**Release Date:** 2026-08-11
+
+## Added
+
+### Containerization
+
+- Docker-based API containerization
+- Production-oriented API Dockerfile
+- Multi-stage Docker build
+- Runtime dependency isolation
+- Python 3.12 slim base image
+- Dedicated non-root runtime user
+- Docker healthcheck
+- Uvicorn-based container startup
+
+### Docker Compose
+
+- Docker Compose development stack
+- FastAPI API service
+- PostgreSQL 16 service
+- Compose service networking
+- Persistent PostgreSQL volume
+- API healthcheck integration
+
+### Multi-Stage Build
+
+- Dedicated builder stage
+- Dedicated runtime stage
+- `uv` dependency installation in builder stage
+- `pyproject.toml` and `uv.lock` based dependency resolution
+- `.venv` generated as the runtime dependency artifact
+- Runtime `.venv` copied from builder stage
+- Build-time tooling separated from runtime environment
+
+### Runtime Security
+
+- Non-root `incidentlab` runtime user
+- Explicit file ownership using `COPY --chown`
+- Build-time utilities kept outside the runtime environment
+- Least-privilege container execution
+
+---
+
+## Changed
+
+- IncidentLab can now run as a reproducible Docker-based application stack.
+- The API runtime is no longer dependent on the host's Python environment when executed through Docker.
+- PostgreSQL is now available as a containerized service through Docker Compose.
+- The existing layered application architecture remains unchanged inside the API container.
+- Containerization now provides the runtime boundary around the existing FastAPI application architecture.
+- Containerization assets are implemented as:
+  - `apps/api/Dockerfile`
+  - `apps/api/Dockerfile.multistage`
+  - `compose.yaml`
+
+---
+
+## Improved
+
+### Runtime Reproducibility
+
+The application runtime is now standardized through Docker.
+
+The container provides:
+
+```text
+Python
+   +
+Application
+   +
+Runtime Dependencies
+   +
+Uvicorn
+```
+
+This reduces dependency differences between host environments.
+
+---
+
+### Build and Runtime Separation
+
+The multi-stage build separates:
+
+```text
+Build Environment
+       │
+       ▼
+Dependency Artifact
+       │
+       ▼
+Runtime Environment
+```
+
+Build-time tools such as `uv` and `curl` are not required by the normal application runtime.
+
+---
+
+### Image Optimization
+
+Docker image layers were inspected using:
+
+```bash
+docker history incidentlab-api:multistage
+```
+
+The initial implementation contained an unnecessary large filesystem layer caused by a recursive ownership operation.
+
+The implementation was changed from a separate ownership mutation to:
+
+```dockerfile
+COPY --chown=incidentlab:incidentlab ...
+```
+
+This removed the unnecessary recursive ownership layer.
+
+The resulting API image size was reduced from approximately:
+
+```text
+265 MB
+```
+
+to:
+
+```text
+192 MB
+```
+
+---
+
+### Runtime Security
+
+The API container now executes using:
+
+```text
+incidentlab
+```
+
+instead of the default root user.
+
+Application files and runtime artifacts are copied with explicit ownership.
+
+---
+
+## Validation
+
+The containerization implementation was validated through:
+
+- Successful Docker image build
+- Successful standalone multi-stage container startup
+- Docker healthcheck transition from `starting` to `healthy`
+- API health endpoint returning HTTP 200
+- Runtime user verification
+- Runtime Python executable verification
+- Runtime dependency verification
+- Docker Compose stack startup
+- PostgreSQL health verification
+- API log inspection
+- PostgreSQL log inspection
+- Docker image history inspection
+
+Standalone API validation:
+
+```bash
+docker run -d \
+  --name incidentlab-multistage-test \
+  -p 8001:8000 \
+  incidentlab-api:multistage
+```
+
+Health endpoint validation:
+
+```bash
+curl http://localhost:8001/api/v1/health
+```
+
+Runtime user validation:
+
+```bash
+docker exec incidentlab-multistage-test whoami
+```
+
+Expected result:
+
+```text
+incidentlab
+```
+
+Runtime Python validation:
+
+```bash
+docker exec incidentlab-multistage-test \
+  python -c "import sys; print(sys.executable)"
+```
+
+Expected result:
+
+```text
+/app/.venv/bin/python
+```
+
+Docker Compose validation:
+
+```bash
+docker compose up -d --build
+```
+
+The resulting stack successfully started:
+
+```text
+incidentlab-api-1
+incidentlab-db-1
+```
+
+Both services reached a healthy state.
+
+---
+
+## Infrastructure
+
+- PostgreSQL 16 container
+- Persistent PostgreSQL volume
+- Docker Compose network
+- API-to-database service communication
+- Application-level healthcheck
+- Container runtime health monitoring
+
+---
+
+## Git Integration
+
+The containerization implementation was developed on:
+
+```text
+feature/containerization-foundation
+```
+
+The completed implementation was merged into:
+
+```text
+main
+```
+
+using a fast-forward merge.
+
+The merge introduced:
+
+```text
+apps/api/Dockerfile.multistage
+compose.yaml
+```
+
+The updated `main` branch was pushed to the remote repository.
+
+The feature branch was subsequently removed after successful integration.
+
+---
+
+## Cleanup
+
+Temporary Docker resources created during development and validation were cleaned after verification.
+
+Unused BuildKit cache was reclaimed using:
+
+```bash
+docker builder prune
+```
+
+Approximately 3.12 GB of unused builder cache was reclaimed.
+
+Persistent application resources such as the PostgreSQL data volume were retained.
+
+---
+
+## Architectural Outcome
+
+v0.8.0 establishes the Containerization Foundation for IncidentLab.
+
+The platform now has:
+
+```text
+Layered Application Architecture
+             │
+             ▼
+       Docker Runtime
+             │
+       ┌─────┴─────┐
+       ▼           ▼
+      API           DB
+   Container     Container
+                    │
+                    ▼
+             Persistent Data
+```
+
+This provides the runtime foundation required for future:
+
+- CI/CD
+- Infrastructure as Code
+- Kubernetes
+- Observability
+- DevSecOps
+
+---
+
 # v0.7.0 — Authentication Foundation
 
 **Release Date:** 2026-07-30
