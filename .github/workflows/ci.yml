@@ -27,7 +27,7 @@ jobs:
           docker images
 
       - name: Login  to DockerHub
-        uses: actions/docker-login@v4
+        uses: actions/login-action@v4
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
