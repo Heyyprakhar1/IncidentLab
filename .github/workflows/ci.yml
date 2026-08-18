@@ -33,13 +33,6 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push to DockerHub
-        uses: docker/build-push-action@v6
-        with:
-          context: apps/api
-          file: apps/api/Dockerfile.multistage
-          push: true
-          tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/incidentlab-v1.0.0
-            ${{ secrets.DOCKERHUB_TOKEN }}/incidentlab-v1.0.0
+        run: docker push ${{ vars.DOCKERHUB_USERNAME }}/incidentlab:v1.0.0
 
 
