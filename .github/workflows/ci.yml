@@ -40,7 +40,6 @@ jobs:
           push: true
           tags: |
             ${{ vars.DOCKERHUB_USERNAME }}/incidentlab-v1.0.0
-            ${{ secrets.DOCKERHUB_TOKEN }}/incidentlab-v1.0.0
-        run: echo "tagged image pushed to DockerHub"
+            ${{ secrets.DOCKERHUB_TOKEN }}/incidentlab-v1.0.0"
 
 
