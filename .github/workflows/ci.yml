@@ -14,7 +14,7 @@ jobs:
         run: docker --version
 
       - name: Docker Build
-        run: docker build -t incidentlab-v1.0.0 apps/api/
+        run: docker build -f apps/api/Dockerfile.multistage -t incidentlab-v1.0.0 apps/api/
 
       - name: Image verification
         run: docker image inspect incidentlab-v1.0.0
