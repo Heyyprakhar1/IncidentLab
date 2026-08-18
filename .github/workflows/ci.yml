@@ -23,5 +23,13 @@ jobs:
 
       - name: Image tagging
         run: |
-          docker image tag incidentlab-v1.0.0 ${{ vars.DOCKERHUB_USERNAME }}
+          docker image tag incidentlab-v1.0.0 ${{ vars.DOCKERHUB_USERNAME }}/incidentlab:v1.0.0
           docker images
+
+      - name: Login  to DockerHub
+        uses: actions/docker-login@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
