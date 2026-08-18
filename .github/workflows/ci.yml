@@ -1,7 +1,20 @@
-name: CI
+name: Docker-CI
 on:
-  workflow_dispatch
+  push:
 
-author: ${{ github.actor }}
+jobs:
+  Docker-build:
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
 
+      - name: Verify Docker
+        run: docker --version
+
+      - name: Docker Build
+        run: docker build -t incidentlab-v1.0.0 apps/api/Dockerfile
+
+      - name: Image verification
+        run: docker image inspect incidentlab-v1.0.0
