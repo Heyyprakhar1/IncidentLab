@@ -17,4 +17,11 @@ jobs:
         run: docker build -f apps/api/Dockerfile.multistage -t incidentlab-v1.0.0 apps/api/
 
       - name: Image verification
-        run: docker image inspect incidentlab-v1.0.0
+        run: |
+          docker images
+          docker image inspect incidentlab-v1.0.0
+
+      - name: Image tagging
+        run: |
+          docker image tag incidentlab-v1.0.0 ${{ vars.DOCKERHUB_USERNAME }}
+          docker images
