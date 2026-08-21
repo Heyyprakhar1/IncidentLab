@@ -1,0 +1,31 @@
+name: matrix
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: ["windows-latest", "ubuntu-latest", "macos-latest" ]
+        python: [ "3.10", "3.11", "3.12" ] 
+        include:
+          - environment: staging
+          - os: ubuntu-latest
+          - python: "3.12"
+          
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: checkout the repository
+        uses: actions/checkout@v4
+
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python: ${{ matrix.python }}
+          
+      - name: Print message
+        run: |
+          echo "OS: ${{ matrix.os }}
+          echo "python: ${{ matrix.python }}
+          echo "environment: ${{ matrix.environment }}
+          
