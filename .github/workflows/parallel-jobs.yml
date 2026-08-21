@@ -1,36 +1,31 @@
-name: parallel-jobs
+name: docker-build
 on:
   workflow_dispatch:
 
+permissions: 
+  contents: read
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
+    strategy:
+      matrix:
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        python: ["3.11", "3.12", "3.13"]
+
+    runs-on: ${{ matrix.os }}
+
     steps:
-      - name: print the message
-        run: echo "running on build Job"
-  unit-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: print the message
-        run: echo "running on unit-test Job"
-  security-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - name: print the message
-        run: echo "running on security-scan Job"
-  docker-build:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: print the message
-        run: echo "running on docker-build Job"
-  deploy:
-    needs:
-      - docker-build
-      - unit-test
-      - security-scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: print the message
-        run: echo "running on deploy Job"
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Setting up the env
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Push to GHCR
+        run: echo "pushing to ghcr"
+
+      
+
+  
