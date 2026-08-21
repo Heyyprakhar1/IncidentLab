@@ -11,7 +11,7 @@ jobs:
         include:
           - environment: staging, production
           - os: ubuntu-latest
-          - python: "3.12"
+          - python: "3.10"
           
     runs-on: ${{ matrix.os }}
     steps:
