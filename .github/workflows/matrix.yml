@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         os: ["windows-latest", "ubuntu-latest", "macos-latest" ]
-        python: [ "3.10", "3.11", "3.12" ] 
+        python: [ "3.11", "3.12", "3.13" ] 
         include:
           - environment: staging
           - os: ubuntu-latest
@@ -25,7 +25,7 @@ jobs:
           
       - name: Print message
         run: |
-          echo "OS: ${{ matrix.os }}
-          echo "python: ${{ matrix.python }}
-          echo "environment: ${{ matrix.environment }}
+          echo "OS: ${{ matrix.os }}"
+          echo "python: ${{ matrix.python }}"
+          echo "environment: ${{ matrix.environment }}"
           
