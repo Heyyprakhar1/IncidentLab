@@ -9,7 +9,7 @@ jobs:
         os: ["windows-latest", "ubuntu-latest", "macos-latest" ]
         python: [ "3.11", "3.12", "3.13" ] 
         include:
-          - environment: staging
+          - environment: staging, production
           - os: ubuntu-latest
           - python: "3.12"
           
