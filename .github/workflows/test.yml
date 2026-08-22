@@ -1,0 +1,31 @@
+name: matrix-test
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print msg
+        run: echo "running on build job"
+
+  test:
+    needs: build
+    strategy:
+      matrix:
+          os: [ "windows-latest", "ubuntu-latest" ]
+          python: ["3.11", "3.12" ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: print the msg
+        run: echo "waits for build"
+
+  deploy:
+    needs: 
+      - build
+      - test
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: print message
+        run: echo "tests & builds are successfully done.."
