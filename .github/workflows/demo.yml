@@ -1,0 +1,20 @@
+name: data-pass
+on:
+  push:
+
+jobs:
+  build:
+    outputs:
+      folder-name: ${{ steps.demo_folder.outputs.folder_name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: folder creation
+        id: demo_folder
+        run: echo "folder_name=demo" >> $GITHUB_OUTPUT
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: fetch the build job output
+        run: echo "${{ needs.build.outputs.folder-name }}"
