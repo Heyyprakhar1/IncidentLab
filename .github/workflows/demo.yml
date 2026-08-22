@@ -2,12 +2,18 @@ name: data-pass
 on:
   push:
 
+permissions: 
+  contents: read
+
 jobs:
   build:
     outputs:
       folder-name: ${{ steps.demo_folder.outputs.folder_name }}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+        
       - name: folder creation
         id: demo_folder
         run: echo "folder_name=demo" >> $GITHUB_OUTPUT
@@ -15,6 +21,27 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+
+      - name: OIDC comes into the picture
+        run: echo "OIDC token rec'd"
+    
       - name: fetch the build job output
         run: echo "${{ needs.build.outputs.folder-name }}"
+
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: GHCR in the action
+        uses: docker/login-action@v3
+        
+      - name: checkout the repository
+        uses: actions/checkout@v4
