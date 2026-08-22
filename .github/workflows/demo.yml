@@ -35,6 +35,7 @@ jobs:
         run: echo "${{ needs.build.outputs.folder-name }}"
 
   deploy:
+    needs: [ build, test ]
     runs-on: ubuntu-latest
     permissions:
       contents: read
