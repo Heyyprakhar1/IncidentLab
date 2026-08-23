@@ -1,41 +1,47 @@
-# System Architecture
+System Architecture
 
 IncidentLab follows a layered architecture that emphasizes separation of concerns, maintainability, and incremental architectural evolution.
 
-Beginning with **v0.7.0 – Authentication Foundation**, the architecture introduced a dedicated authentication layer built on top of the Dependency Injection Foundation. Authentication is implemented using stateless JSON Web Tokens (JWT) and integrates with FastAPI's dependency injection system.
+Beginning with v0.7.0 – Authentication Foundation, the architecture introduced a dedicated authentication layer built on top of the Dependency Injection Foundation. Authentication is implemented using stateless JSON Web Tokens (JWT) and integrates with FastAPI's dependency injection system.
 
-With **v0.8.0 – Containerization Foundation**, the existing application architecture is now executed inside a standardized Docker runtime.
+With v0.8.0 – Containerization Foundation, the existing application architecture is executed inside a standardized Docker runtime.
 
 Containerization provides the runtime boundary around the application without changing the internal application layering.
 
----
-
-# Architectural Principles
+Architectural Principles
 
 The project follows these principles:
 
-- Separation of Concerns
-- Single Responsibility Principle
-- Dependency Injection
-- Repository Pattern
-- Layered Architecture
-- Stateless Authentication
-- Reproducible Runtime Environments
-- Least-Privilege Runtime
-- Incremental Evolution
-- Production-Inspired Design
-- Environment Consistency
+Separation of Concerns
 
----
+Single Responsibility Principle
 
-# High-Level System Architecture
+Dependency Injection
+
+Repository Pattern
+
+Layered Architecture
+
+Stateless Authentication
+
+Reproducible Runtime Environments
+
+Least-Privilege Runtime
+
+Incremental Evolution
+
+Production-Inspired Design
+
+Environment Consistency
+
+High-Level System Architecture
 
 The current architecture consists of two major boundaries:
 
-1. **Application Architecture** — the internal layered FastAPI application.
-2. **Runtime Architecture** — Docker and Docker Compose providing the execution environment.
+Application Architecture — the internal layered FastAPI application.
 
-```text
+Runtime Architecture — Docker and Docker Compose providing the execution environment.
+
                          Client
                             │
                             ▼
@@ -68,19 +74,15 @@ The current architecture consists of two major boundaries:
                             │
                             ▼
                   incidentlab_postgres_data
-```
 
 Docker Compose manages the API and PostgreSQL services as a local containerized stack.
 
----
-
-# Application Architecture
+Application Architecture
 
 The containerization layer does not replace the existing application architecture.
 
 Inside the API container, IncidentLab continues to follow the established layered design:
 
-```text
                   Client
                      │
                      ▼
@@ -106,17 +108,13 @@ Inside the API container, IncidentLab continues to follow the established layere
           │
           ▼
         PostgreSQL
-```
 
 The application remains responsible for business and data-access concerns, while Docker provides the standardized runtime environment.
 
----
-
-# Runtime Architecture
+Runtime Architecture
 
 The runtime architecture is provided through Docker Compose.
 
-```text
 Docker Compose
       │
       ├──────────────────────┐
@@ -133,23 +131,17 @@ Docker Compose
       │
       ▼
  Application Layers
-```
 
-The API container exposes port `8000`.
+The API container exposes port 8000.
 
 PostgreSQL remains an internal service of the Compose stack and uses persistent storage through the named volume:
 
-```text
 incidentlab_postgres_data
-```
 
----
-
-# Container Runtime Boundary
+Container Runtime Boundary
 
 The API application is executed inside a Docker container rather than directly on the host.
 
-```text
 Host Operating System
         │
         ▼
@@ -162,76 +154,63 @@ IncidentLab API Container
         ├── Application
         ├── .venv
         └── Uvicorn
-```
 
 The runtime uses a dedicated non-root user:
 
-```text
 incidentlab
-```
 
 This establishes a least-privilege runtime boundary around the application.
 
----
-
-# API Container
+API Container
 
 The API container is responsible for running the IncidentLab FastAPI application.
 
 Its runtime responsibilities include:
 
-- Starting Uvicorn.
-- Loading the FastAPI application.
-- Serving HTTP requests.
-- Executing application dependencies.
-- Communicating with PostgreSQL.
-- Reporting application health.
+Starting Uvicorn.
+
+Loading the FastAPI application.
+
+Serving HTTP requests.
+
+Executing application dependencies.
+
+Communicating with PostgreSQL.
+
+Reporting application health.
 
 The application is started using:
 
-```dockerfile
 ENTRYPOINT ["uvicorn"]
-```
 
-with the application target and runtime arguments supplied through `CMD`.
+with the application target and runtime arguments supplied through CMD.
 
 The effective command is conceptually:
 
-```text
 uvicorn app.main:app --host 0.0.0.0 --port 8000
-```
 
----
-
-# Application Health
+Application Health
 
 The API exposes:
 
-```text
 GET /api/v1/health
-```
 
 Docker uses the configured healthcheck to determine whether the application is healthy.
 
 The architecture therefore distinguishes between:
 
-```text
 Container Process Running
           ≠
 Application Healthy
-```
 
 A container can be running while the application inside it is unable to serve requests correctly.
 
 The healthcheck provides an application-level signal to the container runtime.
 
----
-
-# PostgreSQL Container
+PostgreSQL Container
 
 PostgreSQL is executed as a separate Compose service.
 
-```text
 IncidentLab API
       │
       │ database connection
@@ -240,27 +219,21 @@ PostgreSQL Container
       │
       ▼
 Persistent Volume
-```
 
 The database container is responsible only for database execution and persistence.
 
 The API communicates with PostgreSQL through the Docker Compose network rather than relying on host-level database configuration.
 
----
-
-# Persistent Storage
+Persistent Storage
 
 PostgreSQL uses the named volume:
 
-```text
 incidentlab_postgres_data
-```
 
 The volume provides persistence across PostgreSQL container recreation.
 
 The relationship is:
 
-```text
 PostgreSQL Container
         │
         ▼
@@ -268,128 +241,120 @@ incidentlab_postgres_data
         │
         ▼
 Persistent Database Data
-```
 
 Container lifecycle and database data lifecycle are therefore treated separately.
 
----
+Application Layer Responsibilities
 
-# Application Layer Responsibilities
-
-## API Layer
+API Layer
 
 Location:
 
-```text
 app/api/
-```
 
 Responsibilities:
 
-- HTTP request handling
-- Request validation
-- Response serialization
-- Dependency resolution
+HTTP request handling
+
+Request validation
+
+Response serialization
+
+Dependency resolution
 
 The API layer contains no business logic and performs no manual object construction.
 
----
-
-## Authentication Layer
+Authentication Layer
 
 Locations:
 
-```text
 app/auth/
 app/dependencies/auth.py
-```
 
 Responsibilities:
 
-- Password hashing
-- Password verification
-- JWT generation
-- JWT validation
-- Current user resolution
+Password hashing
+
+Password verification
+
+JWT generation
+
+JWT validation
+
+Current user resolution
 
 Authentication is implemented using HTTP Bearer tokens and integrated through FastAPI dependency injection.
 
----
-
-## Dependency Layer
+Dependency Layer
 
 Location:
 
-```text
 app/dependencies/
-```
 
 Responsibilities:
 
-- Database dependency providers
-- Repository dependency providers
-- Service dependency providers
-- Authentication dependency providers
+Database dependency providers
+
+Repository dependency providers
+
+Service dependency providers
+
+Authentication dependency providers
 
 This layer centralizes object creation and manages dependency relationships across the application.
 
----
-
-## Service Layer
+Service Layer
 
 Location:
 
-```text
 app/services/
-```
 
 Responsibilities:
 
-- Business logic
-- Application use cases
-- User authentication
-- Coordination between layers
+Business logic
+
+Application use cases
+
+User authentication
+
+Coordination between layers
 
 Services consume repositories through dependency injection and remain independent of database session management.
 
----
-
-## Repository Layer
+Repository Layer
 
 Location:
 
-```text
 app/repositories/
-```
 
 Responsibilities:
 
-- Data access
-- SQLAlchemy queries
-- ORM persistence
-- Transaction interaction
+Data access
+
+SQLAlchemy queries
+
+ORM persistence
+
+Transaction interaction
 
 Repositories receive database sessions through dependency providers.
 
----
-
-## Database Layer
+Database Layer
 
 The database layer uses:
 
-- SQLAlchemy Async ORM
-- PostgreSQL
-- Alembic migrations
+SQLAlchemy Async ORM
+
+PostgreSQL
+
+Alembic migrations
 
 The database provider is injected into repositories rather than being constructed directly inside application services.
 
----
-
-# Containerization Components
+Containerization Components
 
 The current repository contains the containerization assets directly alongside the API application:
 
-```text
 IncidentLab/
 │
 ├── apps/
@@ -403,23 +368,18 @@ IncidentLab/
 │   └── ...
 │
 └── ...
-```
 
-The initial ADR proposed an `infra/` directory for containerization assets, but the implemented v0.8 architecture places the API Dockerfiles under `apps/api/` and the Compose definition at the repository root.
+The initial ADR proposed an infra/ directory for containerization assets, but the implemented v0.8 architecture places the API Dockerfiles under apps/api/ and the Compose definition at the repository root.
 
 The architecture documentation reflects the implemented repository state.
 
----
-
-# Dockerfile Architecture
+Dockerfile Architecture
 
 IncidentLab maintains two Dockerfile implementations:
 
-```text
 apps/api/
 ├── Dockerfile
 └── Dockerfile.multistage
-```
 
 The conventional Dockerfile provides the standard container build.
 
@@ -427,13 +387,10 @@ The multi-stage Dockerfile provides a separated builder and runtime architecture
 
 Both remain part of the project intentionally.
 
----
-
-# Multi-Stage Build Architecture
+Multi-Stage Build Architecture
 
 The multi-stage implementation separates build-time responsibilities from runtime responsibilities.
 
-```text
                  Builder Stage
                        │
                        ├── Python
@@ -458,31 +415,23 @@ The multi-stage implementation separates build-time responsibilities from runtim
                        ├── Application
                        ├── Uvicorn
                        └── incidentlab user
-```
 
 The builder generates the runtime dependency environment.
 
-The runtime stage receives the required `.venv` artifact instead of the complete builder environment.
+The runtime stage receives the required .venv artifact instead of the complete builder environment.
 
 Build-time utilities are therefore separated from the application runtime.
 
----
-
-# Runtime Artifact Selection
+Runtime Artifact Selection
 
 The multi-stage build explicitly selects the runtime artifact:
 
-```dockerfile
-COPY --from=builder \
-    --chown=incidentlab:incidentlab \
-    /app/.venv /app/.venv
-```
+COPY --from=builder     --chown=incidentlab:incidentlab     /app/.venv /app/.venv
 
 The runtime does not require the complete builder filesystem.
 
 The conceptual flow is:
 
-```text
 Builder Environment
         │
         ├── uv
@@ -495,51 +444,35 @@ Builder Environment
               │
               ▼
       Runtime Environment
-```
 
 This keeps build responsibilities separate from runtime responsibilities.
 
----
-
-# Runtime Ownership
+Runtime Ownership
 
 Application files and runtime artifacts are copied with explicit ownership:
 
-```dockerfile
 COPY --chown=incidentlab:incidentlab . .
-```
 
 and:
 
-```dockerfile
-COPY --from=builder \
-    --chown=incidentlab:incidentlab \
-    /app/.venv /app/.venv
-```
+COPY --from=builder     --chown=incidentlab:incidentlab     /app/.venv /app/.venv
 
 This allows the container to run as:
 
-```text
 incidentlab
-```
 
 without requiring a later recursive ownership operation.
 
----
-
-# Image Optimization Architecture
+Image Optimization Architecture
 
 Docker image construction is treated as a layered filesystem process.
 
 During the v0.8 implementation, the multi-stage image was inspected using:
 
-```bash
 docker history incidentlab-api:multistage
-```
 
 The initial implementation contained an unnecessary ownership layer:
 
-```text
 COPY /app/.venv
        │
        ▼
@@ -550,37 +483,27 @@ RUN chown -R ...
        │
        ▼
 Another large filesystem layer
-```
 
-The recursive ownership operation was removed in favor of `COPY --chown`.
+The recursive ownership operation was removed in favor of COPY --chown.
 
 This reduced the resulting image from approximately:
 
-```text
 265 MB
-```
 
 to:
 
-```text
 192 MB
-```
 
 The optimization demonstrates that image architecture and filesystem-layer behavior must both be considered when designing containerized systems.
 
----
-
-# Docker Compose Architecture
+Docker Compose Architecture
 
 The local containerized environment is orchestrated through:
 
-```text
 compose.yaml
-```
 
 The stack consists of:
 
-```text
 Compose Project
       │
       ├── api
@@ -590,19 +513,15 @@ Compose Project
       └── db
             │
             └── PostgreSQL 16
-```
 
 The API and database operate as separate services.
 
 Docker Compose provides the service-level networking required for communication between them.
 
----
-
-# Network Architecture
+Network Architecture
 
 The Compose stack provides an isolated network for its services.
 
-```text
 Docker Compose Network
         │
         ├──────────────┐
@@ -614,7 +533,6 @@ Docker Compose Network
                │
         Internal Service
         Communication
-```
 
 The API communicates with PostgreSQL through the Compose service network.
 
@@ -622,54 +540,39 @@ The host-facing API port is published separately.
 
 The application therefore has two distinct networking concerns:
 
-```text
 Host → API
-```
 
 and:
 
-```text
 API → PostgreSQL
-```
 
----
-
-# Port Architecture
+Port Architecture
 
 The API listens on:
 
-```text
 8000
-```
 
 The Docker Image declares:
 
-```dockerfile
 EXPOSE 8000
-```
 
 The Compose configuration publishes the API to the host.
 
 Conceptually:
 
-```text
 Host :8000
     │
     ▼
 API Container :8000
-```
 
-`EXPOSE` documents the container port; Compose port mapping is responsible for host publication.
+EXPOSE documents the container port; Compose port mapping is responsible for host publication.
 
 PostgreSQL remains an internal service and does not need to be exposed to the host for normal API operation.
 
----
-
-# Build and Runtime Flow
+Build and Runtime Flow
 
 The complete v0.8 runtime flow is:
 
-```text
 Dockerfile
      │
      ▼
@@ -693,11 +596,9 @@ Healthcheck
      │
      ▼
 Healthy Application
-```
 
 For the multi-stage build:
 
-```text
 Dockerfile.multistage
         │
         ▼
@@ -711,15 +612,11 @@ Runtime Stage
         │
         ▼
 Final API Image
-```
 
----
-
-# Runtime Security Architecture
+Runtime Security Architecture
 
 The v0.8 runtime applies a least-privilege approach.
 
-```text
 Build Environment
       │
       ├── Build tooling
@@ -733,61 +630,69 @@ Runtime Environment
       ├── Runtime dependencies
       ├── Uvicorn
       └── Non-root user
-```
 
 The application does not require the builder's tooling during normal execution.
 
 The runtime user is:
 
-```text
 incidentlab
-```
 
 This reduces unnecessary privileges within the application container.
 
----
-
-# Architectural Scope
+Architectural Scope
 
 The v0.8 Containerization Foundation introduces:
 
-- Docker image creation
-- Docker container execution
-- Production-oriented Dockerfile design
-- Multi-stage Docker builds
-- Docker Compose
-- PostgreSQL container integration
-- Persistent volumes
-- Container networking
-- Runtime healthchecks
-- Non-root runtime execution
-- Runtime artifact selection
+Docker image creation
 
----
+Docker container execution
 
-# Out of Scope
+Production-oriented Dockerfile design
+
+Multi-stage Docker builds
+
+Docker Compose
+
+PostgreSQL container integration
+
+Persistent volumes
+
+Container networking
+
+Runtime healthchecks
+
+Non-root runtime execution
+
+Runtime artifact selection
+
+Out of Scope
 
 The following capabilities remain outside the current containerization architecture:
 
-- Kubernetes
-- Helm
-- Terraform
-- CI/CD pipelines
-- Container registry publishing
-- Image signing
-- Production deployment
-- Full container orchestration
-- Multi-environment deployment architecture
+Kubernetes
+
+Helm
+
+Terraform
+
+CI/CD pipelines
+
+Container registry publishing
+
+Image signing
+
+Production deployment
+
+Full container orchestration
+
+Multi-environment deployment architecture
 
 These capabilities will be introduced through future architectural milestones.
 
----
-
-# Architectural Evolution
+Architectural Evolution
 
 The architecture has evolved through the following foundations:
 
-```text
 Repository Foundation
         ↓
 Platform Operations Foundation
@@ -813,31 +718,35 @@ Kubernetes
 Observability
         ↓
 DevSecOps
-```
 
 Each milestone builds on the previous architecture while preserving separation of concerns.
 
----
-
-# v0.8 Architectural Outcome
+v0.8 Architectural Outcome
 
 The Containerization Foundation establishes a standardized runtime boundary around IncidentLab.
 
 The platform now has:
 
-- A containerized FastAPI API
-- A containerized PostgreSQL database
-- Persistent database storage
-- Docker Compose orchestration
-- Non-root API execution
-- Application health monitoring
-- Conventional and multi-stage Dockerfile implementations
-- Explicit runtime artifact selection
-- A reproducible local container stack
+A containerized FastAPI API
+
+A containerized PostgreSQL database
+
+Persistent database storage
+
+Docker Compose orchestration
+
+Non-root API execution
+
+Application health monitoring
+
+Conventional and multi-stage Dockerfile implementations
+
+Explicit runtime artifact selection
+
+A reproducible local container stack
 
 The application architecture remains layered while the runtime architecture has become containerized.
 
-```text
 Application Architecture
         │
         ▼
@@ -860,30 +769,33 @@ Docker Compose
         │
         ├── API Container
         └── PostgreSQL Container
-```
 
----
-
-# Future Evolution
+Future Evolution
 
 The Containerization Foundation prepares IncidentLab for:
 
-- CI/CD Foundation
-- Infrastructure as Code
-- Kubernetes Foundation
-- Observability Foundation
-- DevSecOps Foundation
-- Authorization (RBAC)
+CI/CD Foundation
+
+Infrastructure as Code
+
+Kubernetes Foundation
+
+Observability Foundation
+
+DevSecOps Foundation
+
+Authorization (RBAC)
 
 Future milestones will build upon the containerized application without requiring fundamental changes to the existing layered application architecture.
 
----
+Related Components
 
-# Related Components
+apps/api/
 
-- `apps/api/`
-- `apps/api/Dockerfile`
-- `apps/api/Dockerfile.multistage`
-- `compose.yaml`
-- `docs/adr/ADR-006-containerization-foundation.md`
-- `engineering-notes/v0.8-containerization-foundation/`
+apps/api/Dockerfile
+
+apps/api/Dockerfile.multistage
+
+compose.yaml
+
+docs/adr/ADR-006-containerization-foundation.md

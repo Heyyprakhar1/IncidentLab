@@ -1,238 +1,51 @@
-# IncidentLab
-
-A production-inspired backend platform for learning modern backend engineering through incremental architectural evolution.
-
-Rather than building features first, IncidentLab focuses on establishing strong engineering foundations—including API design, persistence, dependency injection, authentication, exception handling, containerization, and future production capabilities.
-
----
-
-# Why IncidentLab Exists
-
-IncidentLab demonstrates how backend systems evolve over time through small, well-defined architectural milestones.
-
-Each release introduces a single foundational capability while preserving existing behavior and maintaining a clean architecture.
-
-The project follows an architecture-first approach where implementation decisions are documented, tested, and integrated incrementally.
-
----
-
-# Current Release
-
-**v0.8.0 — Containerization Foundation**
-
-Current architectural foundations:
-
-- API Foundation
-- Persistence Foundation
-- Error Handling Foundation
-- Dependency Injection Foundation
-- Authentication Foundation
-- Containerization Foundation
-
----
-
-# Implemented Foundations
-
-## API Foundation
-
-- FastAPI application bootstrap
-- Versioned API routing
-- Request lifecycle management
-- Structured logging middleware
-
----
-
-## Persistence Foundation
-
-- SQLAlchemy Async ORM
-- Alembic migrations
-- Repository pattern
-- PostgreSQL integration
-
----
-
-## Error Handling Foundation
-
-- Global exception handling
-- Standardized API error responses
-- Domain-specific exceptions
-- Centralized error management
-
----
-
-## Dependency Injection Foundation
-
-- Dedicated dependency provider layer
-- Repository dependency providers
-- Service dependency providers
-- Centralized object construction
-- Improved separation of concerns
-- FastAPI dependency injection
-
----
-
-## Authentication Foundation
-
-- JWT-based authentication
-- User registration
-- User login
-- Password hashing using Argon2
-- HTTP Bearer authentication
-- Protected API endpoints
-- Current user dependency injection
-
----
-
-## Containerization Foundation
-
-IncidentLab is now containerized using Docker.
-
-The API can run as an isolated container with:
-
-- Python 3.12 slim base image
-- Non-root runtime user
-- Explicit application working directory
-- Production-oriented Dockerfile
-- Multi-stage Docker build
-- Runtime dependency isolation
-- Docker healthcheck
-- Uvicorn-based application startup
-- Docker Compose integration
-
-The containerized stack consists of:
-
-```text
 IncidentLab
-     │
-     ▼
-Docker Compose
-     │
-     ├───────────────┐
-     ▼               ▼
-FastAPI API      PostgreSQL
-Container        Container
-     │               │
-     │               ▼
-     │        Persistent Volume
-     │
-     ▼
-Healthcheck
-```
 
-The API container is built using:
+A production-inspired backend platform for learning modern backend and cloud-native engineering through incremental architectural evolution.
 
-```text
-apps/api/
-├── Dockerfile
-└── Dockerfile.multistage
-```
+Rather than building features first, IncidentLab focuses on strong engineering foundations, clean architecture, operational ownership, and documented engineering decisions.
 
-The multi-stage Dockerfile is maintained as an alternative implementation to the conventional Dockerfile.
+Implementation establishes the capability. Documentation records the capability.
 
----
+Why IncidentLab Exists
 
-# Container Runtime
+IncidentLab demonstrates how systems evolve through small, well-defined architectural milestones.
 
-The API runtime uses a dedicated non-root user:
+Each release introduces a focused capability while preserving existing behavior and maintaining a clean architecture.
 
-```text
-incidentlab
-```
+The project is intentionally built as an engineering system rather than a collection of unrelated technology demonstrations.
 
-The application listens on:
+Current Release
 
-```text
-8000
-```
+v0.8.0 — Containerization Foundation
 
-The runtime command is composed using:
+Completed foundations:
 
-```dockerfile
-ENTRYPOINT ["uvicorn"]
-```
+Repository
 
-with default arguments defined through `CMD`.
+Platform Operations
 
-Conceptually:
+API
 
-```text
-uvicorn
-   +
-app.main:app
-   +
---host 0.0.0.0
-   +
---port 8000
-```
+Persistence
 
-The container also includes an application healthcheck based on the API health endpoint.
+Error Handling
 
----
+Dependency Injection
 
-# Multi-Stage Container Build
+Authentication
 
-IncidentLab includes a multi-stage Docker build that separates build-time responsibilities from runtime responsibilities.
+Containerization
 
-```text
-Builder Stage
-     │
-     ├── uv
-     ├── build dependencies
-     ├── pyproject.toml
-     ├── uv.lock
-     │
-     ▼
-   /app/.venv
-     │
-     │ selected runtime artifact
-     ▼
-Runtime Stage
-     │
-     ├── .venv
-     ├── application source
-     ├── uvicorn
-     └── incidentlab user
-```
+Current milestone: v0.9.0 — CI/CD Foundation (Ongoing)
 
-The builder generates the Python virtual environment using the project's dependency definitions.
+Current CI/CD work includes GitHub Actions, jobs, parallel jobs, matrix jobs, conditions, permissions, and workflow validation.
 
-The runtime stage receives the required runtime artifact rather than the complete builder environment.
+For the complete milestone history and current roadmap, see docs/roadmap.md.
 
-Build-time utilities such as `uv` and `curl` are therefore not required as runtime application dependencies.
+Current Architecture
 
----
+IncidentLab uses a layered application architecture surrounded by a containerized runtime.
 
-# Docker Compose
-
-The development stack is orchestrated using Docker Compose.
-
-The current Compose stack includes:
-
-```text
-services:
-
-  api
-   │
-   └── IncidentLab FastAPI application
-
-  db
-   │
-   └── PostgreSQL 16
-```
-
-PostgreSQL uses a persistent named volume:
-
-```text
-incidentlab_postgres_data
-```
-
-This allows database data to persist independently from the PostgreSQL container lifecycle.
-
----
-
-# High-Level Architecture
-
-```text
                          Client
                             │
                             ▼
@@ -265,691 +78,296 @@ This allows database data to persist independently from the PostgreSQL container
                             │
                             ▼
                   incidentlab_postgres_data
-```
 
-The containerization layer surrounds the existing application architecture rather than replacing it.
+The containerization layer provides the runtime boundary without replacing the internal application architecture.
 
-The application remains internally organized using layered architecture.
+Implemented Foundations
 
----
+API
 
-# Application Architecture
+FastAPI
 
-Inside the API container, the application follows the existing layered design:
+Versioned API routing
 
-```text
-                  Client
-                     │
-                     ▼
-      Authorization: Bearer <JWT>
-                     │
-                     ▼
-             FastAPI Endpoints
-                     │
-                     ▼
-      Authentication Dependency
-                     │
-                     ▼
-       Dependency Injection Layer
-          ┌──────────┴──────────┐
-          ▼                     ▼
- Application Services     Database Provider
-          │
-          ▼
-     Repository Layer
-          │
-          ▼
-     SQLAlchemy Async ORM
-          │
-          ▼
-        PostgreSQL
-```
+Request lifecycle management
 
-Containerization provides the runtime boundary around this application architecture.
+Structured logging middleware
 
----
+Persistence
 
-# Repository Structure
+SQLAlchemy Async ORM
 
-```text
-IncidentLab/
-│
-├── apps/
-│   └── api/
-│       ├── app/
-│       │   ├── api/
-│       │   ├── auth/
-│       │   ├── core/
-│       │   ├── db/
-│       │   ├── dependencies/
-│       │   ├── exceptions/
-│       │   ├── middleware/
-│       │   ├── models/
-│       │   ├── repositories/
-│       │   ├── schemas/
-│       │   └── services/
-│       │
-│       ├── migrations/
-│       ├── tests/
-│       ├── Dockerfile
-│       └── Dockerfile.multistage
-│
-├── docs/
-│   ├── adr/
-│   ├── architecture.md
-│   ├── changelog.md
-│   ├── product-requirements.md
-│   └── roadmap.md
-│
-├── compose.yaml
-└── ...
-```
-# API Endpoints
+PostgreSQL
 
-## Health
+Alembic
 
-| Method | Endpoint         | Description              |
-| ------ | ---------------- | ------------------------ |
-| GET    | `/api/v1/health` | Application health check |
+Repository pattern
 
-## Authentication
+Reliability
 
-| Method | Endpoint                | Description                       |
-| ------ | ----------------------- | --------------------------------- |
-| POST   | `/api/v1/auth/register` | Register a new user               |
-| POST   | `/api/v1/auth/login`    | Authenticate user and receive JWT |
-| GET    | `/api/v1/auth/me`       | Retrieve authenticated user       |
+Global exception handling
 
-## Incidents
+Standardized API error responses
 
-| Method | Endpoint                 | Description                                         |
-| ------ | ------------------------ | --------------------------------------------------- |
-| POST   | `/api/v1/incidents`      | Create incident *(Authentication Required)*         |
-| GET    | `/api/v1/incidents`      | List incidents *(Authentication Required)*          |
-| GET    | `/api/v1/incidents/{id}` | Retrieve incident by ID *(Authentication Required)* |
+Domain-specific exceptions
 
----
+Dependency Injection
 
-# Technology Stack
+Centralized dependency providers
 
-## Application
+Repository and service providers
 
-- Python 3.12
-- FastAPI
-- SQLAlchemy 2.x
-- PostgreSQL
-- Alembic
-- Pydantic v2
-- PyJWT
-- pwdlib (Argon2)
-- Uvicorn
+FastAPI dependency injection
 
-## Containerization
+Authentication
 
-- Docker
-- Docker Compose
-- Python 3.12 slim
-- uv
-- Multi-stage Docker builds
-- Docker Healthcheck
+JWT authentication
 
----
+User registration and login
 
-# Running IncidentLab
+Argon2 password hashing
 
-## Run the API Directly
+HTTP Bearer authentication
 
-The API can still be executed directly during application development using the project's Python environment.
+Protected API endpoints
 
----
+Containerization
 
-## Run with Docker Compose
+Docker-based API runtime
 
-Build and start the complete containerized stack:
+Python 3.12 slim
 
-```bash
+Non-root incidentlab user
+
+Docker healthcheck
+
+Docker Compose
+
+PostgreSQL 16 container
+
+Persistent database volume
+
+Conventional and multi-stage Dockerfiles
+
+Runtime dependency isolation
+
+Container Runtime
+
+The API is containerized using:
+
+apps/api/
+├── Dockerfile
+└── Dockerfile.multistage
+
+The multi-stage implementation separates build-time dependencies from the runtime environment.
+
+Builder Stage
+     │
+     ├── uv
+     ├── pyproject.toml
+     ├── uv.lock
+     │
+     ▼
+   /app/.venv
+     │
+     ▼
+Runtime Stage
+     │
+     ├── .venv
+     ├── application
+     ├── uvicorn
+     └── incidentlab user
+
+The local stack is orchestrated through:
+
+Docker Compose
+     │
+     ├── API
+     │
+     └── PostgreSQL
+            │
+            ▼
+   incidentlab_postgres_data
+
+API Endpoints
+
+Method
+
+Endpoint
+
+Purpose
+
+GET
+
+/api/v1/health
+
+Application health
+
+POST
+
+/api/v1/auth/register
+
+Register user
+
+POST
+
+/api/v1/auth/login
+
+Authenticate user
+
+GET
+
+/api/v1/auth/me
+
+Current authenticated user
+
+POST
+
+/api/v1/incidents
+
+Create incident
+
+GET
+
+/api/v1/incidents
+
+List incidents
+
+GET
+
+/api/v1/incidents/{id}
+
+Retrieve incident
+
+Incident endpoints require authentication.
+
+Technology Stack
+
+Application
+
+Python 3.12
+
+FastAPI
+
+SQLAlchemy 2.x
+
+PostgreSQL
+
+Alembic
+
+Pydantic v2
+
+PyJWT
+
+pwdlib / Argon2
+
+Uvicorn
+
+Containerization
+
+Docker
+
+Docker Compose
+
+Python 3.12 slim
+
+uv
+
+Multi-stage builds
+
+Docker Healthcheck
+
+Running IncidentLab
+
+Docker Compose
+
 docker compose up -d --build
-```
 
-Check running containers:
+Check services:
 
-```bash
 docker ps
-```
-
-The expected services are:
-
-```text
-incidentlab-api
-incidentlab-db
-```
 
 Check API logs:
 
-```bash
 docker compose logs api
-```
 
 Check database logs:
 
-```bash
 docker compose logs db
-```
 
----
+Verify the API:
 
-# Health Verification
-
-The API exposes a health endpoint:
-
-```bash
 curl http://localhost:8000/api/v1/health
-```
 
-Expected response:
+Build the Multi-Stage Image
 
-```json
-{
-  "status": "healthy",
-  "service": "IncidentLab API",
-  "version": "0.7.0",
-  "environment": "development"
-}
-```
-
-Docker also monitors the application through its configured healthcheck.
-
-A running container and a healthy application are treated as separate operational states.
-
----
-
-# Docker Image
-
-The multi-stage API Image can be built directly with:
-
-```bash
 docker build \
   -f apps/api/Dockerfile.multistage \
   -t incidentlab-api:multistage \
   apps/api
-```
 
-The resulting runtime Image contains the application and required runtime dependencies without carrying the complete builder environment.
+Engineering Workflow
 
----
+Each milestone follows an architecture-first workflow:
 
-# Runtime Security
-
-The API container does not run the application as root.
-
-The runtime user is:
-
-```text
-incidentlab
-```
-
-This follows the principle of least privilege and reduces unnecessary container runtime privileges.
-
-The runtime environment also avoids requiring build-time utilities such as `uv` and `curl` during normal application execution.
-
----
-
-# Container Development Workflow
-
-Containerization follows the project's architecture-first development workflow:
-
-```text
 Requirements
-     │
-     ▼
+     ↓
 Architecture Decision Record
-     │
-     ▼
+     ↓
 Implementation
-     │
-     ▼
+     ↓
 Feature Branch
-     │
-     ▼
-Docker Build
-     │
-     ▼
-Container Validation
-     │
-     ▼
-Compose Integration
-     │
-     ▼
-Testing
-     │
-     ▼
+     ↓
+Testing / Validation
+     ↓
+Integration
+     ↓
+main Branch
+     ↓
 Documentation
-     │
-     ▼
-Merge into main
-     │
-     ▼
+     ↓
 Release Tag
-```
 
----
+Documentation
 
-# Docker Validation
+The detailed project documentation lives under docs/.
 
-The containerization milestone was validated through:
+Document
 
-- Successful Docker Image build
-- Successful standalone container startup
-- Docker healthcheck transition to `healthy`
-- API health endpoint returning HTTP 200
-- Runtime user verification
-- Runtime Python executable verification
-- Runtime dependency verification
-- Docker Compose startup
-- PostgreSQL health verification
-- API and PostgreSQL log inspection
+Purpose
 
-The standalone multi-stage Image was tested using:
+docs/vision.md
 
-```bash
-docker run -d \
-  --name incidentlab-multistage-test \
-  -p 8001:8000 \
-  incidentlab-api:multistage
-```
+Long-term platform vision
 
-The container transitioned from:
+docs/product-requirements.md
 
-```text
-health: starting
-```
+Product scope and requirements
 
-to:
+docs/architecture.md
 
-```text
-healthy
-```
+Current architecture and runtime design
 
-The API was then verified independently:
+docs/roadmap.md
 
-```bash
-curl http://localhost:8001/api/v1/health
-```
+Completed, ongoing, and future milestones
 
-The response confirmed:
+docs/changelog.md
 
-```json
-{
-  "status": "healthy",
-  "service": "IncidentLab API",
-  "version": "0.7.0",
-  "environment": "development"
-}
-```
+Engineering and implementation changes
 
-The runtime user was verified with:
+docs/release-history.md
 
-```bash
-docker exec incidentlab-multistage-test whoami
-```
+Release evolution
 
-Result:
+docs/adr/
 
-```text
-incidentlab
-```
+Architectural Decision Records
 
-The runtime executable path was also verified:
+Deep technical learning notes are maintained separately under engineering-notes/.
 
-```bash
-docker exec incidentlab-multistage-test \
-  sh -c 'which uv || true; which curl || true; which uvicorn'
-```
+Roadmap
 
-Result:
-
-```text
-/app/.venv/bin/uvicorn
-```
-
-This confirmed that `uv` and `curl` were not required in the runtime environment while `uvicorn` was available through the application's virtual environment.
-
-The Python executable was verified with:
-
-```bash
-docker exec incidentlab-multistage-test \
-  python -c "import sys; print(sys.executable)"
-```
-
-Result:
-
-```text
-/app/.venv/bin/python
-```
-
----
-
-# Docker Compose Validation
-
-The complete stack was validated using:
-
-```bash
-docker compose up -d --build
-```
-
-The resulting stack contained:
-
-```text
-incidentlab-api-1
-incidentlab-db-1
-```
-
-Both containers reached a healthy state.
-
-The API logs confirmed successful startup:
-
-```text
-Started server process
-Waiting for application startup
-Application startup complete
-Uvicorn running on http://0.0.0.0:8000
-GET /api/v1/health HTTP/1.1" 200 OK
-```
-
-The PostgreSQL logs confirmed:
-
-```text
-database system is ready to accept connections
-```
-
-This validated the multi-stage API Image as part of the actual IncidentLab Compose stack rather than only as an isolated container.
-
----
-
-# Docker Image Optimization
-
-During the multi-stage implementation, Image layers were inspected using:
-
-```bash
-docker history incidentlab-api:multistage
-```
-
-The first implementation showed an unnecessary large ownership layer.
-
-The problematic flow was conceptually:
-
-```text
-COPY /app/.venv
-       │
-       ▼
-~72.7 MB layer
-       │
-       ▼
-RUN chown -R ...
-       │
-       ▼
-Another ~72.7 MB layer
-```
-
-The problem was not the size of `.venv` itself.
-
-The problem was that a recursive ownership change created another large filesystem layer.
-
-The runtime implementation was changed to establish ownership during the copy operation:
-
-```dockerfile
-COPY --from=builder \
-    --chown=incidentlab:incidentlab \
-    /app/.venv /app/.venv
-```
-
-and:
-
-```dockerfile
-COPY --chown=incidentlab:incidentlab . .
-```
-
-The unnecessary recursive `chown` operation was removed.
-
-The resulting Image size decreased from approximately:
-
-```text
-265 MB
-```
-
-to:
-
-```text
-192 MB
-```
-
-This demonstrated that multi-stage builds alone do not guarantee minimal Image size.
-
-Understanding Docker filesystem layers and build behavior remains essential for optimization.
-
----
-
-# Docker Cleanup
-
-After the implementation was merged and pushed, temporary Docker resources were cleaned carefully.
-
-The final application Image was retained:
-
-```text
-incidentlab-api:latest
-```
-
-The PostgreSQL Image was retained:
-
-```text
-postgres:16
-```
-
-The persistent PostgreSQL volume was retained:
-
-```text
-incidentlab_postgres_data
-```
-
-Temporary anonymous volumes were inspected before removal.
-
-Unused BuildKit cache was cleaned using:
-
-```bash
-docker builder prune
-```
-
-Approximately 3.12 GB of unused builder cache was reclaimed.
-
-Default Docker networks were preserved:
-
-```text
-bridge
-host
-none
-```
-
-The goal was to remove temporary build/test resources without deleting application Images or persistent database data.
-
----
-
-# Git Integration
-
-The containerization implementation was developed on the feature branch:
-
-```text
-feature/containerization-foundation
-```
-
-The completed implementation was merged into `main` using a fast-forward merge:
-
-```text
-750e686
-   ↓
-1e88ffe
-```
-
-The merge introduced:
-
-```text
-apps/api/Dockerfile.multistage
-compose.yaml
-```
-
-The updated `main` branch was then pushed to the remote repository.
-
-After successful verification, the feature branch was removed both locally and remotely.
-
-Final Git state:
-
-```text
-main
-develop
-origin/main
-origin/develop
-```
-
-The working tree was clean after the merge and push.
-
----
-
-# Containerization Milestone Outcome
-
-The v0.8 containerization milestone established a reproducible local container runtime for IncidentLab.
-
-The milestone now provides:
-
-```text
-Dockerfile
-     │
-     ├── Conventional single-stage build
-     │
-     └── Multi-stage build
-              │
-              ▼
-         Runtime Image
-              │
-              ▼
-       Docker Compose
-          ┌───┴───┐
-          ▼       ▼
-         API      DB
-          │       │
-          │       ▼
-          │   Persistent Data
-          │
-          ▼
-      Healthcheck
-```
-
-The implementation was built, executed, inspected, optimized, integrated with Compose, validated, merged, pushed, and cleaned.
-
----
-
-# Current Architecture Foundations
-
-Implemented architectural foundations:
-
-- Repository Foundation
-- Platform Operations Foundation
-- API Foundation
-- Persistence Foundation
-- Error Handling Foundation
-- Dependency Injection Foundation
-- Authentication Foundation
-- Containerization Foundation
-
----
-
-# Roadmap
-
-## Completed
-
-- Repository Foundation
-- Platform Operations Foundation
-- API Foundation
-- Persistence Foundation
-- Error Handling Foundation
-- Dependency Injection Foundation
-- Authentication Foundation
-- Containerization Foundation
-
-## Upcoming
-
-- CI/CD Foundation
-- Infrastructure as Code
-- Kubernetes
-- Observability
-- DevSecOps
-- Authorization (RBAC)
-
-Containerization establishes the runtime foundation for the upcoming CI/CD, Infrastructure as Code, Kubernetes, and DevSecOps milestones.
-
----
-
-# Documentation
-
-Project documentation is available under the `docs/` directory.
-
-Key documents include:
-
-- Architecture
-- Product Requirements
-- Roadmap
-- ADRs
-- Changelog
-- Release History
-
-Engineering learning notes are maintained separately under:
-
-```text
-engineering-notes/
-```
-
----
-
-# Development Workflow
-
-Each release follows an architecture-first workflow:
-
-1. Requirements
-2. Architecture Decision Record (ADR)
-3. Implementation (Feature Branch)
-4. Testing
-5. Merge into `main`
-6. Documentation
-7. Release Tag
-
-Each milestone is expected to leave the repository in a clean and reproducible state before the next architectural capability begins.
-
----
-
-# Release History
-
-| Version | Milestone                       |
-| ------- | ------------------------------- |
-| v0.8.0  | Containerization Foundation     |
-| v0.7.0  | Authentication Foundation       |
-| v0.6.0  | Dependency Injection Foundation |
-| v0.5.0  | Error Handling Foundation       |
-| v0.4.0  | Persistence Foundation          |
-| v0.3.0  | API Foundation                  |
-| v0.2.0  | Platform Operations Foundation  |
-| v0.1.0  | Repository Foundation           |
-
----
-
-# Repository Status
-
-IncidentLab follows an architecture-first, milestone-driven development approach where each release introduces one foundational capability while maintaining backward compatibility and preserving clean software architecture.
-
-With v0.8.0, the platform has moved from a host-based development runtime to a standardized containerized runtime.
-
-The API and PostgreSQL components can now be executed as a reproducible local container stack using Docker Compose.
-
-The project is now positioned for the next stage of evolution:
-
-```text
 Repository
     ↓
 Platform Operations
@@ -975,6 +393,23 @@ Kubernetes
 Observability
     ↓
 DevSecOps
-```
 
-The long-term goal remains to evolve IncidentLab into a production-grade cloud-native backend platform through incremental, documented, and testable engineering milestones.
+Completed: v0.1.0 → v0.8.0
+
+Ongoing: v0.9.0 — CI/CD Foundation
+
+Next: v0.10.0 — Infrastructure as Code Foundation
+
+See docs/roadmap.md for the authoritative roadmap.
+
+Project Status
+
+IncidentLab is evolving from a backend foundation into a production-inspired cloud-native engineering platform.
+
+The current focus is not simply adding technologies, but establishing the engineering practices required to build, operate, investigate, and continuously improve modern systems.
+
+For architecture, decisions, requirements, releases, and future direction, use the docs/ directory as the authoritative project documentation.
+
+License
+
+See the repository for project licensing information.
