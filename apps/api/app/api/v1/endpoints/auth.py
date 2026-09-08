@@ -16,8 +16,8 @@ from app.schemas.auth import (
 )
 from app.schemas.user import UserResponse
 from app.services.auth import (
-    AuthService,
     AuthenticationError,
+    AuthService,
     UserAlreadyExistsError,
 )
 

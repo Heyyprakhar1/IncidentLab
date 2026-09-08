@@ -37,7 +37,6 @@ from app.exceptions.handlers import register_exception_handlers
 from app.lifespan import lifespan
 from app.middleware.request_logging import RequestLoggingMiddleware
 
-
 app = FastAPI(
     lifespan=lifespan,
     title=settings.app_name,
