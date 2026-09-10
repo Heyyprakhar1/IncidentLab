@@ -25,7 +25,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install UV
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v10.0.1
         with:
           enable-cache: true
           version: "latest"
@@ -38,6 +38,14 @@ jobs:
 
       - name: Run ruff
         run: uv run ruff check .
+          
+  security:
+    runs-on: ubuntu-latest
 
- 
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
 
