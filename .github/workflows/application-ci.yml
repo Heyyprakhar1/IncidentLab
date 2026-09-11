@@ -65,4 +65,18 @@ jobs:
         run: semgrep --version
 
       - name: Run Semgrep
-        run: semgrep scan --config p/default . 
+        run: semgrep scan --config p/default .
+
+  container:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 #v4
+
+      - name: Build docker Image
+        run: |
+          docker build \
+             -f apps/api/Dockerfile.multistage \
+             -t incidentlab-api:ci \
+              apps/api
