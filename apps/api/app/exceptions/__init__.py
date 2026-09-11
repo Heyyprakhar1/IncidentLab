@@ -19,7 +19,6 @@ Non-Responsibilities
 from app.exceptions.base import IncidentLabException
 from app.exceptions.incident import IncidentNotFoundException
 
-
 __all__ = [
     "IncidentLabException",
     "IncidentNotFoundException",

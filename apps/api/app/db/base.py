@@ -34,8 +34,7 @@ class Base(DeclarativeBase):
     Base class for all ORM models.
     """
 
-    pass
 
 
 # Import models so SQLAlchemy metadata discovers them.
-from app.models import *  # noqa: F401,F403,E402
+from app.models import *

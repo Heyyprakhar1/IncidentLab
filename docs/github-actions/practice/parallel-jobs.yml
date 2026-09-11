@@ -1,0 +1,36 @@
+name: parallel-jobs
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print the message
+        run: echo "running on build Job"
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print the message
+        run: echo "running on unit-test Job"
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print the message
+        run: echo "running on security-scan Job"
+  docker-build:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: print the message
+        run: echo "running on docker-build Job"
+  deploy:
+    needs:
+      - docker-build
+      - unit-test
+      - security-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: print the message
+        run: echo "running on deploy Job"
