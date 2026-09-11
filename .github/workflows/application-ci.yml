@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   quality:
@@ -74,9 +75,17 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 #v4
 
-      - name: Build docker Image
-        run: |
-          docker build \
-             -f apps/api/Dockerfile.multistage \
-             -t incidentlab-api:ci \
-              apps/api
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: apps/api
+          file: apps/api/Dockerfile.multistage
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/incidentlab-api:${{ github.sha }}
