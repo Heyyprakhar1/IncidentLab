@@ -52,6 +52,9 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
+      - name: Setup UV
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d #v10.0.1
+
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@dcedce43c6f43de0b836d1fe38946645c9c638dc #v2
 
