@@ -88,4 +88,4 @@ jobs:
           context: apps/api
           file: apps/api/Dockerfile.multistage
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/incidentlab-api:${{ github.sha }}
+          tags: ghcr.io/heyyprakhar1/incidentlab-api:${{ github.sha }}
