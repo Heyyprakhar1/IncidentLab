@@ -1,0 +1,237 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 550" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+    <linearGradient id="cardGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="cardGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c4a6e" />
+      <stop offset="100%" stop-color="#082f49" />
+    </linearGradient>
+    <linearGradient id="cardGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
+    <linearGradient id="highlightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0369a1" />
+    </linearGradient>
+    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="960" height="550" rx="16" fill="url(#bgGrad)" stroke="#1f2937" stroke-width="1.5" />
+
+  <!-- Header -->
+  <text x="480" y="38" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#f8fafc" letter-spacing="0.5">
+    Architectural Lifecycle: Docker Working Directory (WORKDIR)
+  </text>
+  <text x="480" y="62" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#e2e8f0">
+    Tracing working directory metadata from base image inheritance through runtime execution and overrides
+  </text>
+
+  <!-- Column 1: Base Image Inheritance -->
+  <g transform="translate(48, 85)">
+    <rect width="265" height="360" rx="12" fill="#131b2e" stroke="#334155" stroke-width="1.5" filter="url(#dropShadow)" />
+
+    <!-- Title Badge -->
+    <rect x="14" y="14" width="165" height="24" rx="6" fill="#4338ca" opacity="0.4" />
+    <text x="96" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#c7d2fe">
+      STAGE 1: INHERITANCE
+    </text>
+
+    <!-- Base Image Resolution -->
+    <rect x="16" y="50" width="233" height="74" rx="8" fill="#1e1b4b" stroke="#6366f1" stroke-width="1" />
+    <text x="132" y="72" text-anchor="middle" font-family="system-ui, monospace" font-size="12" font-weight="700" fill="#a5b4fc">
+      FROM &lt;base_image&gt;
+    </text>
+    <text x="132" y="90" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#e0e7ff">
+      Inherits parent image config
+    </text>
+    <text x="132" y="108" text-anchor="middle" font-family="system-ui, monospace" font-size="10" fill="#cbd5e1">
+      Config.WorkingDir
+    </text>
+
+    <!-- Multi-Stage Distinctions -->
+    <rect x="16" y="136" width="233" height="96" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1" />
+    <text x="132" y="156" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#f8fafc">
+      Stage Initialization Rules
+    </text>
+    <text x="26" y="176" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">
+      • <tspan fill="#38bdf8" font-family="monospace">FROM image</tspan>: uses image default
+    </text>
+    <text x="36" y="192" font-family="system-ui, sans-serif" font-size="9.5" fill="#64748b">
+      (Alpine/Debian: "/", Golang: "/go")
+    </text>
+    <text x="26" y="210" font-family="system-ui, sans-serif" font-size="10" fill="#94a3b8">
+      • <tspan fill="#38bdf8" font-family="monospace">FROM stage</tspan>: inherits stage dir
+    </text>
+
+    <!-- Stage 1 Footer Status -->
+    <rect x="16" y="244" width="233" height="96" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1" />
+    <text x="132" y="266" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#f1f5f9">
+      Baseline Context Established
+    </text>
+    <text x="132" y="286" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#cbd5e1">
+      Working directory is either "/"
+    </text>
+    <text x="132" y="302" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#cbd5e1">
+      or upstream pre-set directory.
+    </text>
+    <text x="132" y="324" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="600" fill="#38bdf8">
+      Ready for Dockerfile instructions
+    </text>
+  </g>
+
+  <!-- Connector 1 -> 2 -->
+  <g transform="translate(315, 255)">
+    <line x1="0" y1="0" x2="16" y2="0" stroke="#38bdf8" stroke-width="2" stroke-dasharray="3 3" />
+    <polygon points="16,-4 22,0 16,4" fill="#38bdf8" />
+  </g>
+
+  <!-- Column 2: Dockerfile WORKDIR & Build Operations -->
+  <g transform="translate(337, 85)">
+    <rect width="286" height="360" rx="12" fill="#0f1f33" stroke="#0284c7" stroke-width="1.5" filter="url(#dropShadow)" />
+
+    <!-- Title Badge -->
+    <rect x="14" y="14" width="180" height="24" rx="6" fill="#0284c7" opacity="0.35" />
+    <text x="104" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#38bdf8">
+      STAGE 2: BUILD-TIME SCOPE
+    </text>
+
+    <!-- WORKDIR Instruction Box -->
+    <rect x="14" y="50" width="258" height="84" rx="8" fill="url(#highlightGrad)" stroke="#38bdf8" stroke-width="1.5" />
+    <text x="143" y="72" text-anchor="middle" font-family="system-ui, monospace" font-size="13" font-weight="700" fill="#ffffff">
+      WORKDIR /app
+    </text>
+    <text x="143" y="90" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10.5" fill="#f0f9ff">
+      1. Resolves path (absolute vs. relative)
+    </text>
+    <text x="143" y="106" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10.5" fill="#f0f9ff">
+      2. Auto-creates directory if missing
+    </text>
+    <text x="143" y="122" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#bae6fd">
+      3. Mutates Config.WorkingDir metadata
+    </text>
+
+    <!-- Anchored Downstream Operations -->
+    <rect x="14" y="146" width="258" height="106" rx="8" fill="#0c4a6e" stroke="#0284c7" stroke-width="1" />
+    <text x="143" y="168" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#ffffff">
+      Downstream Instruction Anchors
+    </text>
+    <text x="24" y="188" font-family="system-ui, sans-serif" font-size="10" fill="#e0f2fe">
+      • <tspan fill="#38bdf8" font-family="monospace">COPY . .</tspan> destination $\to$ <tspan fill="#ffffff" font-weight="700">/app/</tspan>
+    </text>
+    <text x="24" y="206" font-family="system-ui, sans-serif" font-size="10" fill="#e0f2fe">
+      • <tspan fill="#38bdf8" font-family="monospace">RUN &lt;cmd&gt;</tspan> process cwd $\to$ <tspan fill="#ffffff" font-weight="700">/app/</tspan>
+    </text>
+    <text x="24" y="224" font-family="system-ui, sans-serif" font-size="10" fill="#fca5a5">
+      • <tspan fill="#f87171" font-family="monospace">RUN cd</tspan> is ephemeral (subshell only)
+    </text>
+    <text x="24" y="240" font-family="system-ui, sans-serif" font-size="9.5" fill="#bae6fd">
+      • Does NOT add directory to <tspan fill="#ffffff" font-family="monospace">$PATH</tspan>
+    </text>
+
+    <!-- Directory Ownership Note -->
+    <rect x="14" y="264" width="258" height="76" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1" />
+    <text x="143" y="284" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10.5" font-weight="700" fill="#fcd34d">
+      ⚠️ Directory Ownership Reality
+    </text>
+    <text x="143" y="302" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" fill="#cbd5e1">
+      Auto-creation does not guarantee write access
+    </text>
+    <text x="143" y="316" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" fill="#cbd5e1">
+      for non-root users. Explicit pre-creation with
+    </text>
+    <text x="143" y="330" text-anchor="middle" font-family="system-ui, monospace" font-size="9" fill="#38bdf8">
+      chown is the safe production standard.
+    </text>
+  </g>
+
+  <!-- Connector 2 -> 3 -->
+  <g transform="translate(625, 255)">
+    <line x1="0" y1="0" x2="16" y2="0" stroke="#10b981" stroke-width="2" stroke-dasharray="3 3" />
+    <polygon points="16,-4 22,0 16,4" fill="#10b981" />
+  </g>
+
+  <!-- Column 3: OCI Config & Runtime Execution -->
+  <g transform="translate(647, 85)">
+    <rect width="265" height="360" rx="12" fill="#062d25" stroke="#10b981" stroke-width="1.5" filter="url(#dropShadow)" />
+
+    <!-- Title Badge -->
+    <rect x="14" y="14" width="180" height="24" rx="6" fill="#064e3b" opacity="0.6" />
+    <text x="104" y="30" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#34d399">
+      STAGE 3 &amp; 4: RUNTIME
+    </text>
+
+    <!-- Serialized Image Config -->
+    <rect x="14" y="50" width="237" height="74" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="1" />
+    <text x="132" y="72" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#ffffff">
+      OCI Image Configuration
+    </text>
+    <text x="132" y="92" text-anchor="middle" font-family="system-ui, monospace" font-size="10.5" fill="#a7f3d0">
+      "WorkingDir": "/app"
+    </text>
+    <text x="132" y="110" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" fill="#d1fae5">
+      Serialized into JSON image metadata
+    </text>
+
+    <!-- Process Execution -->
+    <rect x="14" y="136" width="237" height="96" rx="8" fill="#022c22" stroke="#059669" stroke-width="1" />
+    <text x="132" y="156" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#34d399">
+      Runtime Process Launch
+    </text>
+    <text x="132" y="174" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#e2e8f0">
+      Container runtime spawns PID 1:
+    </text>
+    <text x="132" y="192" text-anchor="middle" font-family="system-ui, monospace" font-size="10" fill="#6ee7b7">
+      process.cwd = "/app"
+    </text>
+    <text x="132" y="210" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" fill="#a7f3d0">
+      Relative CMD ("./start.sh") resolves here
+    </text>
+    <text x="132" y="224" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#6ee7b7">
+      Binary names ("app") require $PATH
+    </text>
+
+    <!-- Runtime Override -->
+    <rect x="14" y="244" width="237" height="96" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1.2" />
+    <text x="132" y="264" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="700" fill="#fbbf24">
+      ⚡ Runtime Override
+    </text>
+    <text x="132" y="282" text-anchor="middle" font-family="system-ui, monospace" font-size="10" fill="#fde68a">
+      docker run -w /override
+    </text>
+    <text x="132" y="300" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" fill="#cbd5e1">
+      Overrides image default at start.
+    </text>
+    <text x="132" y="316" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" fill="#cbd5e1">
+      Runtime automatically creates
+    </text>
+    <text x="132" y="330" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" fill="#6ee7b7">
+      directory if absent inside container.
+    </text>
+  </g>
+
+  <!-- Bottom Key Architectural Rule Banner -->
+  <g transform="translate(48, 460)">
+    <rect width="864" height="74" rx="10" fill="#1e293b" stroke="#475569" stroke-width="1.5" />
+    <circle cx="34" cy="37" r="15" fill="#0284c7" opacity="0.3" />
+    <text x="34" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15">💡</text>
+    <text x="64" y="23" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#38bdf8" letter-spacing="0.5">
+      CORE ARCHITECTURAL TAKEAWAY
+    </text>
+    <text x="64" y="44" font-family="system-ui, sans-serif" font-size="12" fill="#f8fafc">
+      The <tspan fill="#38bdf8" font-weight="700">WORKDIR</tspan> instruction mutates image metadata (<tspan fill="#ffffff" font-weight="700">Config.WorkingDir</tspan>)—it <tspan fill="#f87171" font-weight="700">never</tspan> modifies the system executable search path (<tspan fill="#ffffff" font-weight="700">$PATH</tspan>).
+    </text>
+    <text x="64" y="62" font-family="system-ui, sans-serif" font-size="11.5" fill="#cbd5e1">
+      It anchors <tspan fill="#38bdf8" font-weight="700">COPY/ADD</tspan> destinations, sets default process execution context, and is dynamically overridable via <tspan fill="#fbbf24" font-weight="700">docker run -w</tspan>.
+    </text>
+  </g>
+</svg>
