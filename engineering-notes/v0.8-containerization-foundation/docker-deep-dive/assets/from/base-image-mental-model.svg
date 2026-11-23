@@ -28,7 +28,7 @@
   <g transform="translate(48, 82)">
     <!-- Card Container -->
     <rect width="412" height="370" rx="12" fill="#131b2e" stroke="#334155" stroke-width="1.5" filter="url(#dropShadow)" />
-    
+
     <!-- Title Badge -->
     <rect x="16" y="14" width="160" height="26" rx="6" fill="#4338ca" opacity="0.4" />
     <text x="96" y="31" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#c7d2fe">
@@ -91,7 +91,7 @@
   <g transform="translate(500, 82)">
     <!-- Card Container -->
     <rect width="412" height="370" rx="12" fill="#0f1f33" stroke="#0284c7" stroke-width="1.5" filter="url(#dropShadow)" />
-    
+
     <!-- Title Badge -->
     <rect x="16" y="14" width="170" height="26" rx="6" fill="#0284c7" opacity="0.35" />
     <text x="101" y="31" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#38bdf8">
