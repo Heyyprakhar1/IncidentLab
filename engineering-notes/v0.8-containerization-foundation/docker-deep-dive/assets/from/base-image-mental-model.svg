@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 550" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+    <linearGradient id="fromHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#0369a1" />
+    </linearGradient>
+    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="960" height="550" rx="16" fill="url(#bgGrad)" stroke="#1f2937" stroke-width="1.5" />
+
+  <!-- Header -->
+  <text x="480" y="38" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" fill="#f8fafc" letter-spacing="0.5">
+    Architectural Mental Model: Virtual Machine vs. Container Image
+  </text>
+  <text x="480" y="62" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#e2e8f0">
+    Understanding the exact userspace boundary provided by the Dockerfile <tspan fill="#38bdf8" font-weight="700">FROM</tspan> instruction
+  </text>
+
+  <!-- Left Column: Virtual Machine -->
+  <g transform="translate(48, 82)">
+    <!-- Card Container -->
+    <rect width="412" height="370" rx="12" fill="#131b2e" stroke="#334155" stroke-width="1.5" filter="url(#dropShadow)" />
+    
+    <!-- Title Badge -->
+    <rect x="16" y="14" width="160" height="26" rx="6" fill="#4338ca" opacity="0.4" />
+    <text x="96" y="31" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#c7d2fe">
+      VIRTUAL MACHINE
+    </text>
+    <text x="396" y="31" text-anchor="end" font-family="system-ui, sans-serif" font-size="11.5" font-weight="500" fill="#cbd5e1">
+      Hardware Virtualization
+    </text>
+
+    <!-- App Layer -->
+    <rect x="24" y="50" width="364" height="46" rx="6" fill="#3730a3" stroke="#6366f1" stroke-width="1" />
+    <text x="206" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+      Application Code &amp; Dependencies
+    </text>
+    <text x="206" y="86" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#e0e7ff">
+      Application binaries, runtimes &amp; configuration
+    </text>
+
+    <!-- Guest OS Userspace -->
+    <rect x="24" y="104" width="364" height="48" rx="6" fill="#1e1b4b" stroke="#4f46e5" stroke-width="1" />
+    <text x="206" y="125" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#e0e7ff">
+      Guest OS Userspace
+    </text>
+    <text x="206" y="142" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#c7d2fe">
+      Distribution utilities, shell &amp; background services
+    </text>
+
+    <!-- Guest OS Kernel -->
+    <rect x="24" y="160" width="364" height="54" rx="6" fill="#881337" stroke="#e11d48" stroke-width="1.5" />
+    <text x="206" y="183" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+      Dedicated Guest OS Kernel
+    </text>
+    <text x="206" y="201" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#fecdd3">
+      Independent kernel &amp; scheduling per VM
+    </text>
+
+    <!-- Hypervisor -->
+    <rect x="24" y="222" width="364" height="46" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" />
+    <text x="206" y="243" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12.5" font-weight="700" fill="#f1f5f9">
+      Hypervisor (Type 1 / Type 2)
+    </text>
+    <text x="206" y="259" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#cbd5e1">
+      KVM, Hyper-V, ESXi, Virtualization framework
+    </text>
+
+    <!-- Host Infrastructure (High Contrast) -->
+    <rect x="24" y="276" width="364" height="74" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
+    <text x="206" y="302" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#f8fafc">
+      Host Hardware &amp; OS Kernel
+    </text>
+    <text x="206" y="321" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11.5" fill="#e2e8f0">
+      Physical CPU, RAM, Storage &amp; Host Kernel
+    </text>
+    <text x="206" y="338" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10.5" fill="#cbd5e1">
+      Hardware virtualized and emulated per VM
+    </text>
+  </g>
+
+  <!-- Right Column: Container & FROM Instruction -->
+  <g transform="translate(500, 82)">
+    <!-- Card Container -->
+    <rect width="412" height="370" rx="12" fill="#0f1f33" stroke="#0284c7" stroke-width="1.5" filter="url(#dropShadow)" />
+    
+    <!-- Title Badge -->
+    <rect x="16" y="14" width="170" height="26" rx="6" fill="#0284c7" opacity="0.35" />
+    <text x="101" y="31" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#38bdf8">
+      DOCKER CONTAINER
+    </text>
+    <text x="396" y="31" text-anchor="end" font-family="system-ui, sans-serif" font-size="11.5" font-weight="500" fill="#38bdf8">
+      OS-Level Virtualization
+    </text>
+
+    <!-- App & Custom Layers -->
+    <rect x="24" y="50" width="364" height="46" rx="6" fill="#0369a1" stroke="#38bdf8" stroke-width="1" />
+    <text x="206" y="70" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+      Application Files &amp; Custom Instructions
+    </text>
+    <text x="206" y="86" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10.5" fill="#e0f2fe">
+      Filesystem layers (COPY, RUN) &amp; metadata (CMD, ENV)
+    </text>
+
+    <!-- FROM Scope: Base Image Rootfs -->
+    <g>
+      <rect x="24" y="104" width="364" height="84" rx="8" fill="url(#fromHighlight)" stroke="#38bdf8" stroke-width="2" />
+      <rect x="32" y="110" width="76" height="16" rx="4" fill="#082f49" stroke="#38bdf8" stroke-width="1" />
+      <text x="70" y="122" text-anchor="middle" font-family="system-ui, monospace" font-size="9.5" font-weight="700" fill="#38bdf8">
+        FROM scope
+      </text>
+      <text x="206" y="143" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+        Base Image Root Filesystem (rootfs)
+      </text>
+      <text x="206" y="160" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10.5" fill="#f0f9ff">
+        Establishes initial rootfs &amp; inherits image configuration
+      </text>
+      <text x="206" y="175" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#bae6fd">
+        Shells, package tools &amp; libraries vary by base image
+      </text>
+    </g>
+
+    <!-- Isolation Barrier -->
+    <g transform="translate(24, 196)">
+      <line x1="0" y1="10" x2="52" y2="10" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="4 3" />
+      <line x1="312" y1="10" x2="364" y2="10" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="4 3" />
+      <rect x="56" y="0" width="252" height="20" rx="10" fill="#0b1728" stroke="#0284c7" stroke-width="1.5" />
+      <text x="182" y="14" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10.5" font-weight="600" fill="#7dd3fc">
+        Namespaces &amp; cgroups isolation boundary
+      </text>
+    </g>
+
+    <!-- Shared Linux Kernel (Runtime Execution) -->
+    <g>
+      <rect x="24" y="224" width="364" height="46" rx="6" fill="#132e27" stroke="#10b981" stroke-width="1.5" />
+      <rect x="34" y="230" width="68" height="16" rx="4" fill="#064e3b" stroke="#10b981" stroke-width="1" />
+      <text x="68" y="242" text-anchor="middle" font-family="system-ui, monospace" font-size="9" font-weight="700" fill="#34d399">
+        RUNTIME
+      </text>
+      <text x="218" y="244" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#34d399">
+        Shared Linux Kernel
+      </text>
+      <text x="206" y="260" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10.5" fill="#a7f3d0">
+        Native host kernel (Linux) or utility VM (Docker Desktop)
+      </text>
+    </g>
+
+    <!-- Host Infrastructure (High Contrast) -->
+    <rect x="24" y="276" width="364" height="74" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
+    <text x="206" y="302" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#f8fafc">
+      Host Physical Infrastructure
+    </text>
+    <text x="206" y="321" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11.5" fill="#e2e8f0">
+      Physical CPU, RAM, Storage &amp; Network
+    </text>
+    <text x="206" y="338" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#cbd5e1">
+      Native Linux processes • Virtualization depends on host platform
+    </text>
+  </g>
+
+  <!-- Bottom Key Architectural Rule Banner (High Contrast, 2-Line Layout) -->
+  <g transform="translate(48, 462)">
+    <rect width="864" height="74" rx="10" fill="#1e293b" stroke="#475569" stroke-width="1.5" />
+    <circle cx="34" cy="37" r="15" fill="#0284c7" opacity="0.3" />
+    <text x="34" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="15">💡</text>
+    <text x="64" y="23" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#38bdf8" letter-spacing="0.5">
+      CORE ARCHITECTURAL TAKEAWAY
+    </text>
+    <text x="64" y="44" font-family="system-ui, sans-serif" font-size="12" fill="#f8fafc">
+      The <tspan fill="#38bdf8" font-weight="700">FROM</tspan> instruction supplies the initial <tspan fill="#ffffff" font-weight="700">userspace rootfs</tspan>—it <tspan fill="#f87171" font-weight="700">never</tspan> packages an OS kernel.
+    </text>
+    <text x="64" y="62" font-family="system-ui, sans-serif" font-size="11.5" fill="#cbd5e1">
+      Containers share the <tspan fill="#34d399" font-weight="700">host Linux kernel</tspan> directly, or a <tspan fill="#34d399" font-weight="700">utility VM kernel</tspan> on Docker Desktop.
+    </text>
+  </g>
+</svg>
